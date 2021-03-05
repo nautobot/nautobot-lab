@@ -18,7 +18,7 @@ COPY pb.yaml .
 COPY templates templates
 COPY supervisord.conf /etc/supervisord.conf
 
-RUN ansible-playbook pb.yaml -vvv
+RUN ansible-playbook pb.yaml
 
 EXPOSE 8000/tcp
 

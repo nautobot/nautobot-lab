@@ -95,6 +95,14 @@
       recurse: yes
       state: directory
 
+  - name: CREATE NAUTOBOT CONFIG DIRECTORY 
+    ansible.builtin.file:
+      name: /opt/nautobot/.nautobot
+      owner: nautobot
+      group: nautobot
+      mode: "0755"
+      state: directory
+
   - name: RUN MAKEMIGRATIONS
     ansible.builtin.command: ./venv/bin/nautobot-server init 
     become_user: nautobot
@@ -108,9 +116,9 @@
       mode: 0644
 
   - name: RUN MAKEMIGRATIONS
-    ansible.builtin.command: ./venv/bin/nautobot-server makemigrations
+    ansible.builtin.command: ./venv/bin/nautobot-server makemigrations --config=/opt/nautobot/.nautobot/nautobot_config.py
     become_user: nautobot
 
   - name: RUN MIGRATE
-    ansible.builtin.command: ./venv/bin/nautobot-server migrate
+    ansible.builtin.command: ./venv/bin/nautobot-server migrate --config=/opt/nautobot/.nautobot/nautobot_config.py
     become_user: nautobot
