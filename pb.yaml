@@ -4,11 +4,6 @@
     nautobot_db_name: nautobot
     nautobot_db_username: nautobot 
     nautobot_db_password: E1x3oasg 
-    cert_path: /etc/ssl
-    country: US
-    state: TX
-    city: Austin
-    domain: nautobot.example.com
     allowed_hosts:
     - "*"
 
@@ -34,8 +29,21 @@
       - postgresql
       - libpq-dev
       - redis-server
-      update_cache: yes
+      - systemctl
+      - git
+      # update_cache: yes
       state: present
+
+  - name: RUN SYSTEMCTL DAEMON-RELOAD
+    ansible.builtin.command: systemctl daemon-reload
+
+  - name: UPDATE REDIS.CONF
+    ansible.builtin.template:
+      src: redis.conf
+      dest: /etc/redis/redis.conf
+      owner: redis
+      group: redis
+      mode: "0640"
 
   - name: UPDATE PG_HBA.CONF
     ansible.builtin.template:
@@ -97,28 +105,20 @@
 
   - name: CREATE NAUTOBOT CONFIG DIRECTORY 
     ansible.builtin.file:
-      name: /opt/nautobot/.nautobot
-      owner: nautobot
-      group: nautobot
+      name: /root/.nautobot
+      owner: root
+      group: root
       mode: "0755"
       state: directory
-
-  - name: RUN MAKEMIGRATIONS
-    ansible.builtin.command: ./venv/bin/nautobot-server init 
-    become_user: nautobot
 
   - name: UPDATE NAUTOBOT CONFIG
     ansible.builtin.template:
       src: nautobot_config.py
-      dest: /opt/nautobot/.nautobot/nautobot_config.py
-      owner: nautobot
-      group: nautobot
+      dest: /root/.nautobot/nautobot_config.py
       mode: 0644
 
   - name: RUN MAKEMIGRATIONS
-    ansible.builtin.command: ./venv/bin/nautobot-server makemigrations --config=/opt/nautobot/.nautobot/nautobot_config.py
-    become_user: nautobot
+    ansible.builtin.command: ./venv/bin/nautobot-server makemigrations
 
   - name: RUN MIGRATE
-    ansible.builtin.command: ./venv/bin/nautobot-server migrate --config=/opt/nautobot/.nautobot/nautobot_config.py
-    become_user: nautobot
+    ansible.builtin.command: ./venv/bin/nautobot-server migrate

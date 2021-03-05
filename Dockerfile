@@ -5,12 +5,12 @@ MAINTAINER James Williams <james.williams@networktocode.com>
 WORKDIR /opt/nautobot
 
 COPY pb.yaml .
+
 COPY templates templates
+
 COPY supervisord.conf /etc/supervisord.conf
 
-RUN apt-get update -y && apt-get install -y git python3 python3-psycopg2 python3-pip python3-venv python3-dev systemctl
-
-RUN systemctl daemon-reload
+RUN apt-get update -y && apt-get install -y python3 python3-psycopg2 python3-pip python3-venv python3-dev python3-apt
 
 RUN pip3 install pip --upgrade
 
