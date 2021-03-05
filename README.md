@@ -24,6 +24,6 @@ Password (again):
 Superuser created successfully.
 ```
 
-### Kick the Tires
+## Kick the Tires
 At this point, Nautobot can be accessed at `http://localhost:8000` with the user credentials that were created.
 ![Nautobot](nautobot.png)
