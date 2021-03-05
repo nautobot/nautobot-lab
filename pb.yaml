@@ -13,6 +13,21 @@
     - "*"
 
   tasks:
+  - name: CREATE NAUTOBOT GROUP
+    ansible.builtin.group:
+      name: nautobot
+      system: yes
+      state: present
+
+  - name: CREATE NAUTOBOT USER
+    ansible.builtin.user:
+      name: nautobot
+      system: yes
+      shell: /bin/bash
+      home: /opt/nautobot
+      group: nautobot
+      state: present
+
   - name: INSTALL PACKAGES 
     ansible.builtin.apt:
       name:
@@ -29,10 +44,32 @@
       owner: postgres
       group: postgres
       mode: "0600"
+    register: hba_update
+
+  - name: RESTART POSTGRESQL
+    ansible.builtin.service:
+      name: postgresql
+      state: restarted
+    when: hba_update.changed
+
+  - name: CREATE NAUTOBOT DATABASE
+    community.postgresql.postgresql_db:
+      name: nautobot
+      state: present
+
+  - name: CREATE NAUTOBOT DATABASE USER ACCOUNT AND GRANT PRIVILEGES TO DATABASE
+    community.postgresql.postgresql_user:
+      db: "{{ nautobot_db_name }}"
+      name: "{{ nautobot_db_username }}"
+      password: "{{ nautobot_db_password }}"
+      priv: ALL
+      state: present
 
   - name: SET NAUTOBOT HOME DIRECTORY PERMISSIONS
     ansible.builtin.file:
       name: /opt/nautobot
+      owner: nautobot
+      group: nautobot
       mode: 0775
       state: directory
 
@@ -50,31 +87,30 @@
       virtualenv: /opt/nautobot/venv
       virtualenv_command: python3 -m venv
 
+  - name: SET NAUTOBOT HOME DIRECTORY PERMISSIONS
+    ansible.builtin.file:
+      name: /opt/nautobot
+      owner: nautobot
+      group: nautobot
+      recurse: yes
+      state: directory
+
+  - name: RUN MAKEMIGRATIONS
+    ansible.builtin.command: ./venv/bin/nautobot-server init 
+    become_user: nautobot
+
   - name: UPDATE NAUTOBOT CONFIG
     ansible.builtin.template:
       src: nautobot_config.py
-      dest: /opt/nautobot/nautobot_config.py
+      dest: /opt/nautobot/.nautobot/nautobot_config.py
+      owner: nautobot
+      group: nautobot
       mode: 0644
 
-  - name: SETUP GUNICORN
-    ansible.builtin.template:
-      src: gunicorn.py
-      dest: /opt/nautobot/gunicorn.py
-      mode: 0644
+  - name: RUN MAKEMIGRATIONS
+    ansible.builtin.command: ./venv/bin/nautobot-server makemigrations
+    become_user: nautobot
 
-
-
-
-### 
-#- name: CREATE NAUTOBOT DATABASE
-#  community.postgresql.postgresql_db:
-#    name: nautobot
-#    state: present
-#
-#- name: CREATE NAUTOBOT DATABASE USER ACCOUNT AND GRANT PRIVILEGES TO DATABASE
-#  community.postgresql.postgresql_user:
-#    db: "{{ nautobot_db_name }}"
-#    name: "{{ nautobot_db_username }}"
-#    password: "{{ nautobot_db_password }}"
-#    priv: ALL
-#    state: present
+  - name: RUN MIGRATE
+    ansible.builtin.command: ./venv/bin/nautobot-server migrate
+    become_user: nautobot
