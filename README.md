@@ -16,7 +16,7 @@ docker run -itd --name nautobot -p 8000:8000 nautobot-lab
 ## Creating a Super User
 Once the container has started and all the services have stabalized. A super user account will need to be created to start kicking the tires with what is available in Nautobot. The `createsuperuser` command will prompt you for a username, email address, and password. 
 ```
-% docker exec -it nautobot /opt/nautobot/venv/bin/nautobot-server createsuperuser
+% docker exec -it nautobot nautobot-server createsuperuser
 Username (leave blank to use 'root'): ntc
 Email address: info@networktocode.com
 Password:

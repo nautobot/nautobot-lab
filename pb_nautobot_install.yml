@@ -1,9 +1,5 @@
----
-
-- name: "INSTALL NAUTOBOT"
-  hosts: "localhost"
+- hosts: "localhost"
   connection: "local"
-
   vars:
     nautobot_db_name: "nautobot"
     nautobot_db_username: "nautobot" 
@@ -12,118 +8,70 @@
       - "*"
 
   tasks:
+  - name: "RUN SYSTEMCTL DAEMON-RELOAD"
+    ansible.builtin.command: "systemctl daemon-reload"
 
-    - name: "CREATE NAUTOBOT GROUP"
-      ansible.builtin.group:
-        name: "nautobot"
-        system: yes
-        state: "present"
-  
-    - name: "CREATE NAUTOBOT USER"
-      ansible.builtin.user:
-        name: "nautobot"
-        system: yes
-        shell: "/bin/bash"
-        home: "/opt/nautobot"
-        group: "nautobot"
-        state: "present"
+  - name: "UPDATE REDIS.CONF"
+    ansible.builtin.template:
+      src: "redis.conf"
+      dest: "/etc/redis/redis.conf"
+      owner: "redis"
+      group: "redis"
+      mode: "0640"
 
-    - name: "INSTALL PACKAGES "
-      ansible.builtin.apt:
-        name:
-        - "postgresql"
-        - "libpq-dev"
-        - "redis-server"
-        - "systemctl"
-        - "git"
-        # update_cache: yes
-        state: present
+  - name: "UPDATE PG_HBA.CONF"
+    ansible.builtin.template:
+      src: "pg_hba.conf"
+      dest: "/etc/postgresql/12/main/pg_hba.conf"
+      owner: "postgres"
+      group: "postgres"
+      mode: "0600"
+    register: "hba_update"
 
-    - name: "RUN SYSTEMCTL DAEMON-RELOAD"
-      ansible.builtin.command: "systemctl daemon-reload"
+  - name: "RESTART POSTGRESQL"
+    ansible.builtin.service:
+      name: "postgresql"
+      state: "restarted"
+    when: "hba_update.changed"
 
-    - name: "UPDATE REDIS.CONF"
-      ansible.builtin.template:
-        src: "redis.conf"
-        dest: "/etc/redis/redis.conf"
-        owner: "redis"
-        group: "redis"
-        mode: "0640"
+  - name: "CREATE NAUTOBOT DATABASE"
+    community.postgresql.postgresql_db:
+      name: "nautobot"
+      state: "present"
 
-    - name: "UPDATE PG_HBA.CONF"
-      ansible.builtin.template:
-        src: "pg_hba.conf"
-        dest: "/etc/postgresql/12/main/pg_hba.conf"
-        owner: "postgres"
-        group: "postgres"
-        mode: "0600"
-      register: "hba_update"
+  - name: "CREATE NAUTOBOT DATABASE USER ACCOUNT AND GRANT PRIVILEGES TO DATABASE"
+    community.postgresql.postgresql_user:
+      db: "{{ nautobot_db_name }}"
+      name: "{{ nautobot_db_username }}"
+      password: "{{ nautobot_db_password }}"
+      priv: "ALL"
+      state: "present"
 
-    - name: "RESTART POSTGRESQL"
-      ansible.builtin.service:
-        name: "postgresql"
-        state: "restarted"
-      when: "hba_update.changed"
+  - name: "CREATE NAUTOBOT DIRECTORY"
+    ansible.builtin.file:
+      name: "/opt/nautobot"
+      mode: 0775
+      state: "directory"
 
-    - name: "CREATE NAUTOBOT DATABASE"
-      community.postgresql.postgresql_db:
-        name: "nautobot"
-        state: "present"
+  - name: "RUN NAUTOBOT-SERVER INIT"
+    ansible.builtin.command: "/usr/local/bin/nautobot-server init"
 
-    - name: "CREATE NAUTOBOT DATABASE USER ACCOUNT AND GRANT PRIVILEGES TO DATABASE"
-      community.postgresql.postgresql_user:
-        db: "{{ nautobot_db_name }}"
-        name: "{{ nautobot_db_username }}"
-        password: "{{ nautobot_db_password }}"
-        priv: "ALL"
-        state: "present"
+  - name: "CREATE NAUTOBOT CONFIG DIRECTORY"
+    ansible.builtin.file:
+      name: "/root/.nautobot"
+      owner: "root"
+      group: "root"
+      mode: 0755
+      state: "directory"
 
-    - name: "SET NAUTOBOT HOME DIRECTORY PERMISSIONS"
-      ansible.builtin.file:
-        name: "/opt/nautobot"
-        owner: "nautobot"
-        group: "nautobot"
-        mode: 0775
-        state: "directory"
+  - name: "UPDATE NAUTOBOT CONFIG"
+    ansible.builtin.template:
+      src: "nautobot_config.py"
+      dest: "/root/.nautobot/nautobot_config.py"
+      mode: 0644
 
-    - name: "UPGRADE PIP"
-      ansible.builtin.pip:
-        name: "pip"
-        state: "latest"
-        virtualenv: "/opt/nautobot/venv"
-        virtualenv_command: "python3 -m venv"
+  - name: "RUN MAKEMIGRATIONS"
+    ansible.builtin.command: "/usr/local/bin/nautobot-server makemigrations"
 
-    - name: "INSTALL NAUTOBOT FROM PIP"
-      ansible.builtin.pip:
-        name: "nautobot"
-        state: "latest"
-        virtualenv: "/opt/nautobot/venv"
-        virtualenv_command: "python3 -m venv"
-
-    - name: "SET NAUTOBOT HOME DIRECTORY PERMISSIONS"
-      ansible.builtin.file:
-        name: "/opt/nautobot"
-        owner: "nautobot"
-        group: "nautobot"
-        recurse: yes
-        state: "directory"
-
-    - name: "CREATE NAUTOBOT CONFIG DIRECTORY "
-      ansible.builtin.file:
-        name: "/root/.nautobot"
-        owner: "root"
-        group: "root"
-        mode: 0755
-        state: "directory"
-
-    - name: "UPDATE NAUTOBOT CONFIG"
-      ansible.builtin.template:
-        src: "nautobot_config.py"
-        dest: "/root/.nautobot/nautobot_config.py"
-        mode: 0644
-
-    - name: "RUN MAKEMIGRATIONS"
-      ansible.builtin.command: "./venv/bin/nautobot-server makemigrations"
-
-    - name: "RUN MIGRATE"
-      ansible.builtin.command: "./venv/bin/nautobot-server migrate"
+  - name: "RUN MIGRATE"
+    ansible.builtin.command: "/usr/local/bin/nautobot-server migrate"
