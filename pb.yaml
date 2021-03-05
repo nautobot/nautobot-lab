@@ -1,0 +1,80 @@
+- hosts: localhost
+  connection: local
+  vars:
+    nautobot_db_name: nautobot
+    nautobot_db_username: nautobot 
+    nautobot_db_password: E1x3oasg 
+    cert_path: /etc/ssl
+    country: US
+    state: TX
+    city: Austin
+    domain: nautobot.example.com
+    allowed_hosts:
+    - "*"
+
+  tasks:
+  - name: INSTALL PACKAGES 
+    ansible.builtin.apt:
+      name:
+      - postgresql
+      - libpq-dev
+      - redis-server
+      update_cache: yes
+      state: present
+
+  - name: UPDATE PG_HBA.CONF
+    ansible.builtin.template:
+      src: pg_hba.conf
+      dest: /etc/postgresql/12/main/pg_hba.conf
+      owner: postgres
+      group: postgres
+      mode: "0600"
+
+  - name: SET NAUTOBOT HOME DIRECTORY PERMISSIONS
+    ansible.builtin.file:
+      name: /opt/nautobot
+      mode: 0775
+      state: directory
+
+  - name: UPGRADE PIP
+    ansible.builtin.pip:
+      name: pip
+      state: latest
+      virtualenv: /opt/nautobot/venv
+      virtualenv_command: python3 -m venv
+
+  - name: INSTALL NAUTOBOT FROM PIP
+    ansible.builtin.pip:
+      name: nautobot
+      state: latest
+      virtualenv: /opt/nautobot/venv
+      virtualenv_command: python3 -m venv
+
+  - name: UPDATE NAUTOBOT CONFIG
+    ansible.builtin.template:
+      src: nautobot_config.py
+      dest: /opt/nautobot/nautobot_config.py
+      mode: 0644
+
+  - name: SETUP GUNICORN
+    ansible.builtin.template:
+      src: gunicorn.py
+      dest: /opt/nautobot/gunicorn.py
+      mode: 0644
+
+
+
+
+### 
+#- name: CREATE NAUTOBOT DATABASE
+#  community.postgresql.postgresql_db:
+#    name: nautobot
+#    state: present
+#
+#- name: CREATE NAUTOBOT DATABASE USER ACCOUNT AND GRANT PRIVILEGES TO DATABASE
+#  community.postgresql.postgresql_user:
+#    db: "{{ nautobot_db_name }}"
+#    name: "{{ nautobot_db_username }}"
+#    password: "{{ nautobot_db_password }}"
+#    priv: ALL
+#    state: present
