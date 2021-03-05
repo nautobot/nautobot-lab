@@ -4,7 +4,7 @@ MAINTAINER James Williams <james.williams@networktocode.com>
 
 WORKDIR /opt/nautobot
 
-COPY pb.yaml .
+COPY pb_nautobot_install.yml .
 
 COPY templates templates
 
@@ -18,7 +18,7 @@ RUN pip install ansible==3.0.0 supervisor
 
 RUN ansible-galaxy collection install community.postgresql
 
-RUN ansible-playbook pb.yaml
+RUN ansible-playbook pb_nautobot_install.yml
 
 EXPOSE 8000/tcp
 
