@@ -32,6 +32,8 @@ RUN ansible-galaxy collection install community.postgresql
 
 RUN ansible-playbook pb_nautobot_install.yml
 
+RUN pip uninstall -y ansible && apt-get clean
+
 EXPOSE 8000/tcp
 
 CMD /usr/local/bin/supervisord -c /etc/supervisord.conf
