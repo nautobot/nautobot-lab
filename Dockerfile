@@ -1,6 +1,10 @@
-FROM ubuntu:latest
+FROM ubuntu:20.04
 
 MAINTAINER James Williams <james.williams@networktocode.com>
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
 WORKDIR /opt/nautobot
 
@@ -10,11 +14,19 @@ COPY templates templates
 
 COPY supervisord.conf /etc/supervisord.conf
 
-RUN apt-get update -y && apt-get install -y python3 python3-psycopg2 python3-pip python3-venv python3-dev python3-apt
+COPY tzseeds.txt .
 
-RUN pip3 install pip --upgrade
+RUN debconf-set-selections tzseeds.txt
 
-RUN pip install ansible==3.0.0 supervisor
+RUN apt-get update -y && \
+    apt-get install -y python3 \
+    python3-psycopg2 python3-pip \
+    python3-venv python3-dev \
+    python3-apt postgresql libpq-dev \
+    redis-server systemctl git
+
+RUN pip3 install pip --upgrade && \
+    pip install ansible==3.0.0 supervisor nautobot
 
 RUN ansible-galaxy collection install community.postgresql
 

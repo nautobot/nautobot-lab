@@ -1,0 +1,2 @@
+tzdata tzdata/Areas select US 
+tzdata tzdata/Zones/US select Central 
