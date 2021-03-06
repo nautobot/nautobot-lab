@@ -1,0 +1,16 @@
+---
+services:
+- docker
+language: python
+matrix:
+  include:
+  - python: "3.6"
+
+before_install:
+- pip install pip --upgrade
+
+install:
+- pip install yamllint
+
+script:
+- yamllint pb_nautobot_install.yml 
