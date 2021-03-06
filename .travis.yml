@@ -15,4 +15,4 @@ install:
 script:
 - yamllint pb_nautobot_install.yml 
 - docker run --rm -i hadolint/hadolint < Dockerfile
-- docker build networktocode/nautobot-lab:latest .
+- docker build -t networktocode/nautobot-lab:latest .

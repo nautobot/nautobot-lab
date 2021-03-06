@@ -16,6 +16,8 @@ COPY supervisord.conf /etc/supervisord.conf
 
 COPY tzseeds.txt .
 
+COPY requirements.txt .
+
 RUN debconf-set-selections tzseeds.txt
 
 RUN apt-get update -y && \
@@ -26,7 +28,7 @@ RUN apt-get update -y && \
     redis-server systemctl git
 
 RUN pip3 install pip --upgrade && \
-    pip install ansible==3.0.0 supervisor nautobot
+    pip install -r requirements.txt
 
 RUN ansible-galaxy collection install community.postgresql
 
