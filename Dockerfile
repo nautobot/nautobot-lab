@@ -36,4 +36,8 @@ RUN pip uninstall -y ansible && apt-get clean
 
 EXPOSE 8000/tcp
 
+VOLUME /var/lib/redis
+
+VOLUME /var/lib/postgresql/12/main
+
 CMD /usr/local/bin/supervisord -c /etc/supervisord.conf
