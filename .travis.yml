@@ -1,0 +1,26 @@
+services:
+- docker
+language: python
+matrix:
+  include:
+  - python: '3.6'
+before_install:
+- pip install pip --upgrade
+install:
+- pip install yamllint
+script:
+- yamllint pb_nautobot_install.yml
+- docker run --rm -i hadolint/hadolint < Dockerfile
+- docker build -t networktocode/nautobot-lab:latest .
+
+deploy:
+  provider: script
+  script: bash ./deploy/docker.sh
+
+  on:
+    branch: main
+
+env:
+  docker:
+  - secure: HRocVgXCbj+cDWES5DrE48Tf2HPp9b2kjXCB3vv6Op9jXvGVC0VZOHhIvnobwc8+b9oekqZxr2XS7cRWe1LYBaNTpptg6PdcbYhzbRsr6i/RQJ2v48NtkWv9MON4Tnv2rcb6yncWKVcSxsLD4YN1l74rBHS9/D7Boliy1eIsO9r+YP6LsxJt+tuheE/t1tsCnWJza2V5N9SUnyf7a2SaIxvdaasmm5bVRvgrDg0vvkO9bUV3IVY/4iCpAk0jWVloG4ppLSrpxXQFv9A/pAGkRMFKPVGLDNJdrEjfKuUVQ17QWLKqDg1O6W9JNsr0Uf4HzMhD0fTGGlTzvrrH418AbghL4I5H34ycl9xw1y4mmvcicrJPFmN6Tk4D414pOxDtLM+ZmCDQZWNxTIZuOqiMSSg6T7kwsa57w2ybsjjScaAhcjGkzZwUS7Rsh/BBpei4RU5WVW555jYo5WnB+51Vsnjy5uA0FV9ii7oMWr4hpbBxX/if8h25AQLfxowEqg31Yoyg4N+afBDTDJrB4BGQ0gYEbcb0lqaJxuDCDHSzjL+rTKzluwGWS0MZyv8LUB+SYbhqkvr/F2m4pVaxfjBlJaeUlvvKUcCwdcg5AgV15rfkzKh5f6+Ky6eF42PVWK5ngcMkVX2wKDQSJTtjrvzLBW8lDl1PMTPkK6wnQ2gipy8=
+  - secure: Ap2MGrSZn0Yotmz2TwS+aDZ2mZxgLL99J6XkD1PYYFJd4llegRYBbiobiLosTwDts4Ry6hCW7YJWoR43E4Z67fGzns52gpF3dFGL5yu1LZvPPw+RGiLRSS/oVr+ggzu0Dg+RXky9SlgqrUOpVRpgAQNqjD+byLzwqMAryFIqRWzBpr5n3XenUndjgHrtIh69/vK5s69NBWaRsu9IBpPqphsNkOBOv/SSI04K5Nfa4G7zJp5JO2jo+OWxmX5inLuG9ZeB9UYNMJfWy9XDcUnONSEfQdu1nA+hSgz0AxtqJRvLOQx8MEtSuw8GWyc7FZOYeZgZMnb4Ccxf/mcF0GimUl3uADgdYe4bykY8YgeT5VGe3t/7N9XaqvG+qDLlivi0mM1ecQeBB/C9fhHbor4XKDPQbJdfWlomjjEMnQAjlVqsC6jqW/eu9Ko+EgGPVIFNNgStHf3CLUInNY3jggCr9+NRhTsaWTTnEzg2zpbvpCZCEgT5khb9/AgtDttOAUuD2pWS/nc2JczEAAiplr1dPgkHVXizl+wNi1ry9qCEaUkeE5AVr9A20uKVcA5FuP/QFqstuTlj10vpuOh1n6IoaSYknS2WjxepNTdaShIbca1FLvZhabRU3HXnQLZ8k308FxrqW0uLenlpa4ogQgX5HK9M1Ww4brd2DlxTjncjojM=
