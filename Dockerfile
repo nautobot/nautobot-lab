@@ -44,4 +44,6 @@ VOLUME /var/lib/redis
 
 VOLUME /var/lib/postgresql/12/main
 
+HEALTHCHECK CMD supervisorctl status || exit 1
+
 CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
