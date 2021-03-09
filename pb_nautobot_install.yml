@@ -2,9 +2,9 @@
 - hosts: "localhost"
   connection: "local"
   vars:
-    nautobot_db_name: "{{ lookup('env', 'NAUTOBOT_DATABASE') }}"
-    nautobot_db_username: "{{ lookup('env', 'NAUTOBOT_USER') }}"
-    nautobot_db_password: "{{ lookup('env', 'NAUTOBOT_PASSWORD') }}"
+    nautobot_db_name: "{{ lookup('env', 'DB_NAME') }}"
+    nautobot_db_username: "{{ lookup('env', 'DB_USER') }}"
+    nautobot_db_password: "{{ lookup('env', 'DB_PASSWORD') }}"
     allowed_hosts:
       - "*"
 

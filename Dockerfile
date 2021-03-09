@@ -4,13 +4,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
-ENV NAUTOBOT_DATABASE="nautobot"
+ENV DB_NAME="nautobot"
 
-ENV NAUTOBOT_USER="nautobot"
+ENV DB_USER="nautobot"
 
-ENV NAUTOBOT_PASSWORD="E1x3oasg"
+ENV DB_PASSWORD="E1x3oasg"
 
-ENV NAUTOBOT_DB_HOST="localhost"
+ENV DB_HOST="localhost"
+
+ENV DB_PORT="5432"
 
 WORKDIR /opt/nautobot
 
