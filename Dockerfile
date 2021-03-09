@@ -4,19 +4,21 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
+ENV NAUTOBOT_DATABASE="nautobot"
+
+ENV NAUTOBOT_USER="nautobot"
+
+ENV NAUTOBOT_PASSWORD="E1x3oasg"
+
+ENV NAUTOBOT_DB_HOST="localhost"
+
 WORKDIR /opt/nautobot
 
 COPY pb_nautobot_install.yml .
 
 COPY templates templates
 
-COPY supervisord.conf /etc/supervisord.conf
-
-COPY tzseeds.txt .
-
-COPY requirements.txt .
-
-RUN debconf-set-selections tzseeds.txt
+RUN debconf-set-selections ./templates/tzseeds.txt
 
 # hadolint ignore=DL3008,DL3009
 RUN apt-get update -y && \
@@ -28,7 +30,7 @@ RUN apt-get update -y && \
 
 # hadolint ignore=DL3013
 RUN pip3 install --no-cache-dir pip --upgrade && \
-    pip install --no-cache-dir --requirement requirements.txt
+    pip install --no-cache-dir --requirement ./templates/requirements.txt
 
 RUN ansible-galaxy collection install community.postgresql
 

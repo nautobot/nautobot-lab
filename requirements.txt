@@ -1,3 +1,0 @@
-ansible==3.0.0
-nautobot==1.0.0b2
-supervisor==4.2.2
