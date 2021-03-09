@@ -6,7 +6,7 @@
 
 This image is for the purposes of "kicking the tires" of Nautobot. Utilize `nautobot-lab` to quickly see if Nautobot is right for you and your organization.
 
-It bears repeating, `nautobot-lab` is **NOT a ready for production container**. If you wish to Nautobot in production via Docker, please see the primary [Nautobot repository](https://github.com/nautobot/nautobot).
+It bears repeating, `nautobot-lab` is **NOT a ready for production container**. If you wish to use Nautobot in production, please refer to the [Nautobot documentation](https://nautobot.readthedocs.io/en/latest/installation/).
 
 ## Running from Docker Hub
 
@@ -16,7 +16,7 @@ Building the container yourself isn't needed to get up and running quickly. The 
 docker run -itd --name nautobot -p 8000:8000 networktocode/nautobot-lab
 ```
 
-Because this image is an all-in-one container (with Nautobot, PostgreSQL, and Redis), it will take a few seconds to download the container, and then a few seconds more for all of the services to start and stabilize. Once the container has started and all services have stabilized, the web interface can be accessed via `http://localhost:8000`.
+Because this image is an all-in-one container (with Nautobot, PostgreSQL, and Redis), it will take a few seconds to download the container, and then about 30 seconds more for all of the services to start and stabilize. Once the container has started and all services have stabilized, the web interface can be accessed via `http://localhost:8000`.
 
 If you wish, you can also check the health status of the container by running the following command:
 
@@ -55,7 +55,7 @@ docker run -itd --name nautobot -p 8000:8000 nautobot-lab
 
 ## Creating a Super User
 
-Once the container has started and all the services have stabilized. A super user account will need to be created to start kicking the tires with what is available in Nautobot. The `createsuperuser` command will prompt you for a username, email address, and password.
+Once the container has started and all the services have stabilized, you will need to create a superuser account to start exploring Nautobot. The `nautobot-server createsuperuser` command will prompt you for a username, email address, and password. The email address is unused in this particular workflow and can be left blank.
 
 ```shell
 % docker exec -it nautobot nautobot-server createsuperuser
@@ -72,7 +72,7 @@ At this point, Nautobot can be accessed at `http://localhost:8000` with the user
 
 Explore, test, create, destroy, do whatever you like in this lab instance of Nautobot.
 
-If you have any questions, don't hesitate to reach out in the #Nautobot channel on the [Network To Code slack instance](https://networktocode.slack.com), we'll be happy to assist you!
+If you have any questions, don't hesitate to reach out in the #Nautobot channel on the [Network To Code Slack instance](https://networktocode.slack.com), we'll be happy to assist you!
 
 If you're not a member, you can join the Slack instance [here](http://slack.networktocode.com/).
 
