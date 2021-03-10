@@ -12,7 +12,7 @@ It bears repeating, `nautobot-lab` is **NOT a ready for production container**. 
 
 Building the container yourself isn't needed to get up and running quickly. The image is hosted on Docker Hub for public consumption, and you can download and start it with a single command.
 
-By default, the `naubotbot-lab` Docker container creates a default superuser. The default superuser credentials can be found inthe `Dockerfile`.
+By default, the `naubotbot-lab` Docker container creates a default Super User. The default Super User credentials can be found in the `Dockerfile`. Since the Super User Account is created when the Docker container is built, the credentials can only be changed after logging into Nautobot Lab.
 
 ```shell
 % grep SUPERUSER Dockerfile
@@ -68,7 +68,7 @@ docker run -itd --name nautobot -p 8000:8000 nautobot-lab
 
 ## Creating a Super User
 
-Once the container has started and all the services have stabilized, you will need to create a superuser account to start exploring Nautobot. The `nautobot-server createsuperuser` command will prompt you for a username, email address, and password. The email address is unused in this particular workflow and can be left blank.
+Once the container has started and all the services have stabilized, you will need to create a Super User account to start exploring Nautobot. The `nautobot-server createsuperuser` command will prompt you for a username, email address, and password. The email address is unused in this particular workflow and can be left blank.
 
 ```shell
 % docker exec -it nautobot nautobot-server createsuperuser
