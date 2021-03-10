@@ -14,6 +14,16 @@ ENV DB_HOST="localhost"
 
 ENV DB_PORT="5432"
 
+ENV CREATE_SUPERUSER="true"
+
+ENV SUPERUSER_NAME="admin"
+
+ENV SUPERUSER_PASSWORD="testd3m0"
+
+ENV SUPERUSER_EMAIL="info@networktocode.com"
+
+ENV SUPERUSER_API_TOKEN="abcdef0123456789abcdef0123456789"
+
 WORKDIR /opt/nautobot
 
 COPY pb_nautobot_install.yml .

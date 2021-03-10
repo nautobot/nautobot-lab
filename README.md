@@ -10,7 +10,20 @@ It bears repeating, `nautobot-lab` is **NOT a ready for production container**. 
 
 ## Running from Docker Hub
 
-Building the container yourself isn't needed to get up and running quickly. The image is hosted on Docker Hub for public consumption, and you can download and start it with a single command. You will still need to [create a Super User as shown below](#Creating-a-Super-User).
+Building the container yourself isn't needed to get up and running quickly. The image is hosted on Docker Hub for public consumption, and you can download and start it with a single command.
+
+By default, the `naubotbot-lab` Docker container creates a default superuser. The default superuser credentials can be found inthe `Dockerfile`.
+
+```shell
+% grep SUPERUSER Dockerfile
+ENV CREATE_SUPERUSER="true"
+ENV SUPERUSER_NAME="admin"
+ENV SUPERUSER_PASSWORD="testd3m0"
+ENV SUPERUSER_EMAIL="info@networktocode.com"
+ENV SUPERUSER_API_TOKEN="abcdef0123456789abcdef0123456789"
+```
+
+View the [Creating a Super User section](#Creating-a-Super-User) to create a different Super User.
 
 ```shell
 docker run -itd --name nautobot -p 8000:8000 networktocode/nautobot-lab
@@ -76,4 +89,4 @@ If you have any questions, don't hesitate to reach out in the #Nautobot channel 
 
 If you're not a member, you can join the Slack instance [here](http://slack.networktocode.com/).
 
-![Nautobot](nautobot.png)/
+![Nautobot](nautobot.png)
