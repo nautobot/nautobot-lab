@@ -34,14 +34,14 @@ You are waiting for the container to be in a `healthy` state as shown below.
 
 The container can be built locally, if preferred.
 
-1. Clone the repository.
+1.  Clone the repository.
 
     ```shell
     git clone https://github.com/nautobot/nautobot-lab.git
     ```
 
-2. Enter the `nautobot-lab` directory.
-3. Build the image.
+2.  Enter the `nautobot-lab` directory.
+3.  Build the image.
 
     ```shell
     docker build -t nautobot-lab:latest .
@@ -76,4 +76,4 @@ If you have any questions, don't hesitate to reach out in the #Nautobot channel 
 
 If you're not a member, you can join the Slack instance [here](http://slack.networktocode.com/).
 
-![Nautobot](nautobot.png)
+![Nautobot](nautobot.png)/

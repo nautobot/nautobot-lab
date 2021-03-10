@@ -18,12 +18,12 @@ ALLOWED_HOSTS = {{ allowed_hosts }}
 #   https://docs.djangoproject.com/en/stable/ref/settings/#databases
 DATABASES = {
     "default": {
-        "NAME": os.getenv("NAUTOBOT_DATABASE", "{{ nautobot_db_name }}"),  # Database name
-        "USER": os.getenv("NAUTOBOT_USER", "{{ nautobot_db_username }}"),  # Database username
-        "PASSWORD": os.getenv("NAUTOBOT_PASSWORD", "{{ nautobot_db_password }}"),  # Datbase password
-        "HOST": os.getenv("NAUTOBOT_DB_HOST", "localhost"),  # Database server
-        "PORT": os.getenv("NAUTOBOT_DB_PORT", ""),  # Database port (leave blank for default)
-        "CONN_MAX_AGE": os.getenv("NAUTOBOT_DB_TIMEOUT", 300),  # Database timeout
+        "NAME": os.getenv("DB_NAME", "{{ nautobot_db_name }}"),  # Database name
+        "USER": os.getenv("DB_USER", "{{ nautobot_db_username }}"),  # Database username
+        "PASSWORD": os.getenv("DB_PASSWORD", "{{ nautobot_db_password }}"),  # Datbase password
+        "HOST": os.getenv("DB_HOST", "localhost"),  # Database server
+        "PORT": os.getenv("DB_PORT", ""),  # Database port (leave blank for default)
+        "CONN_MAX_AGE": 300,  # Database timeout
         "ENGINE": "django.db.backends.postgresql",  # Database driver (Postres only supported!)
     }
 }

@@ -2,15 +2,23 @@
 - hosts: "localhost"
   connection: "local"
   vars:
-    nautobot_db_name: "nautobot"
-    nautobot_db_username: "nautobot"
-    nautobot_db_password: "E1x3oasg"
+    nautobot_db_name: "{{ lookup('env', 'DB_NAME') }}"
+    nautobot_db_username: "{{ lookup('env', 'DB_USER') }}"
+    nautobot_db_password: "{{ lookup('env', 'DB_PASSWORD') }}"
     allowed_hosts:
       - "*"
 
   tasks:
     - name: "RUN SYSTEMCTL DAEMON-RELOAD"
       ansible.builtin.command: "systemctl daemon-reload"
+
+    - name: "UPDATE SUPERVISORD.CONF"
+      ansible.builtin.template:
+        src: "supervisord.conf"
+        dest: "/etc/supervisord.conf"
+        owner: "root"
+        group: "root"
+        mode: "0640"
 
     - name: "UPDATE REDIS.CONF"
       ansible.builtin.template:
