@@ -12,14 +12,14 @@ It bears repeating, `nautobot-lab` is **NOT a ready for production container**. 
 
 Building the container yourself isn't needed to get up and running quickly. The image is hosted on Docker Hub for public consumption, and you can download and start it with a single command.
 
-By default, the `naubotbot-lab` Docker container creates a default Super User and populates Nautobot with a set of sandbox data.
+By default, the `naubotbot-lab` Docker container populates Nautobot with a set of sandbox data and creates a user account.
 
-The Super User credentials are:
+The user credentials are:
 
 * Username: `demo`
 * Password: `nautobot`
 
-View the [Creating a Super User section](#Creating-a-Super-User) to create a different Super User.
+View the [Creating a Super User section](#Creating-a-Super-User) to create a Super User.
 
 ```shell
 docker run -itd --name nautobot -p 8000:8000 networktocode/nautobot-lab
