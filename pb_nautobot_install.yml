@@ -79,11 +79,15 @@
         dest: "/root/.nautobot/nautobot_config.py"
         mode: 0644
 
-    - name: "RUN MAKEMIGRATIONS"
-      ansible.builtin.command: "/usr/local/bin/nautobot-server makemigrations"
+    # - name: "RUN MAKEMIGRATIONS"
+    #  ansible.builtin.command: "/usr/local/bin/nautobot-server makemigrations"
 
-    - name: "RUN MIGRATE"
-      ansible.builtin.command: "/usr/local/bin/nautobot-server migrate"
+    # - name: "RUN MIGRATE"
+    #  ansible.builtin.command: "/usr/local/bin/nautobot-server migrate"
 
-    - name: "CREATE SUPERUSER ACCOUNT"
-      ansible.builtin.command: "/opt/nautobot/templates/superuser.sh"
+    - name: "LOAD NAUTOBOT DATA INTO DATABASE"
+      ansible.builtin.command: "/opt/nautobot/templates/loaddata.sh"
+      environment:
+        PGUSER: "{{ lookup('env', 'DB_USER') }}"
+        PGPASSWORD: "{{ lookup('env', 'DB_PASSWORD') }}"
+        PGDATABASE: "{{ lookup('env', 'DB_NAME') }}"

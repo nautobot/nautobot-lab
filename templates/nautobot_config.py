@@ -63,7 +63,7 @@ CACHEOPS_REDIS = "redis://localhost:6379/1"
 # For optimal security, SECRET_KEY should be at least 50 characters in length and contain a mix of letters, numbers, and
 # symbols. Nautobot will not run without this defined. For more information, see
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-SECRET_KEY
-SECRET_KEY = "3jsc)j7@ncyh%qx+z3f6-n6qw+(r=(jz)*_+m19j!#_sm!c7m#"
+SECRET_KEY = os.getenv("SECRET_KEY") 
 
 
 #########################
