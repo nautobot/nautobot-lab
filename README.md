@@ -12,7 +12,7 @@ It bears repeating, `nautobot-lab` is **NOT a ready for production container**. 
 
 Building the container yourself isn't needed to get up and running quickly. The image is hosted on Docker Hub for public consumption, and you can download and start it with a single command.
 
-By default, the `naubotbot-lab` Docker container populates Nautobot with a set of sandbox data and creates a user account.
+By default, the `naubotbot-lab` Docker container populates Nautobot with a Super User account.
 
 The user credentials are:
 
@@ -80,6 +80,10 @@ Superuser created successfully.
 At this point, Nautobot can be accessed at `http://localhost:8000` with the user credentials that were created.
 
 Explore, test, create, destroy, do whatever you like in this lab instance of Nautobot.
+
+We assume that you will want to populate Nautobot Lab with data from your own environment. However, if you want to simply get it up and running with minimal effort, we provide a set of sandbox data. To load the sandbox data, execute:
+
+`docker exec -it nautobot load-mock-data`
 
 If you have any questions, don't hesitate to reach out in the #Nautobot channel on the [Network To Code Slack instance](https://networktocode.slack.com), we'll be happy to assist you!
 

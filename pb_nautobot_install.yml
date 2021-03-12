@@ -20,6 +20,14 @@
         group: "root"
         mode: "0640"
 
+    - name: "ADD LOAD MOCK DATA SCRIPT"
+      ansible.builtin.template:
+        src: "loaddata.sh"
+        dest: "/usr/local/bin/load-mock-data"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+
     - name: "UPDATE REDIS.CONF"
       ansible.builtin.template:
         src: "redis.conf"
@@ -59,7 +67,7 @@
     - name: "CREATE NAUTOBOT DIRECTORY"
       ansible.builtin.file:
         name: "/opt/nautobot"
-        mode: 0775
+        mode: "0775"
         state: "directory"
 
     - name: "RUN NAUTOBOT-SERVER INIT"
@@ -70,24 +78,20 @@
         name: "/root/.nautobot"
         owner: "root"
         group: "root"
-        mode: 0755
+        mode: "0755"
         state: "directory"
 
     - name: "UPDATE NAUTOBOT CONFIG"
       ansible.builtin.template:
         src: "nautobot_config.py"
         dest: "/root/.nautobot/nautobot_config.py"
-        mode: 0644
+        mode: "0644"
 
-    # - name: "RUN MAKEMIGRATIONS"
-    #  ansible.builtin.command: "/usr/local/bin/nautobot-server makemigrations"
+    - name: "RUN MAKEMIGRATIONS"
+      ansible.builtin.command: "/usr/local/bin/nautobot-server makemigrations"
 
-    # - name: "RUN MIGRATE"
-    #  ansible.builtin.command: "/usr/local/bin/nautobot-server migrate"
+    - name: "RUN MIGRATE"
+      ansible.builtin.command: "/usr/local/bin/nautobot-server migrate"
 
-    - name: "LOAD NAUTOBOT DATA INTO DATABASE"
-      ansible.builtin.command: "/opt/nautobot/templates/loaddata.sh"
-      environment:
-        PGUSER: "{{ lookup('env', 'DB_USER') }}"
-        PGPASSWORD: "{{ lookup('env', 'DB_PASSWORD') }}"
-        PGDATABASE: "{{ lookup('env', 'DB_NAME') }}"
+    - name: "CREATE SUPERUSER"
+      ansible.builtin.command: "/opt/nautobot/templates/superuser.sh"

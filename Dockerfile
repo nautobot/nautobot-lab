@@ -4,6 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
+ENV LOAD_DUMP_DATA="true"
+
 ENV DB_NAME="nautobot"
 
 ENV DB_USER="nautobot"
