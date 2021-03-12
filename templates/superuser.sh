@@ -13,3 +13,4 @@ u=User.objects.create_superuser('${SUPERUSER_NAME}', '${SUPERUSER_EMAIL}', '${SU
 t=Token.objects.create(user=u, key='${SUPERUSER_API_TOKEN}')
 u.save()
 t.save()
+END
