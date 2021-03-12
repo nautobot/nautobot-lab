@@ -16,6 +16,16 @@ ENV DB_HOST="localhost"
 
 ENV DB_PORT="5432"
 
+ENV CREATE_SUPERUSER="true"
+
+ENV SUPERUSER_NAME="demo"
+
+ENV SUPERUSER_EMAIL="nautobot@example.com"
+
+ENV SUPERUSER_PASSWORD="nautobot"
+
+ENV SUPERUSER_API_TOKEN="abcdef1234567890abcdef1234567890"
+
 ENV SECRET_KEY="r8OwDznj!!dci#P9ghmRfdu1Ysxm0AiPeDCQhKE+N_rClfWNj"
 
 WORKDIR /opt/nautobot
