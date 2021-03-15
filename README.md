@@ -12,15 +12,6 @@ It bears repeating, `nautobot-lab` is **NOT a ready for production container**. 
 
 Building the container yourself isn't needed to get up and running quickly. The image is hosted on Docker Hub for public consumption, and you can download and start it with a single command.
 
-By default, the `naubotbot-lab` Docker container populates Nautobot with a Super User account.
-
-The user credentials are:
-
-* Username: `demo`
-* Password: `nautobot`
-
-View the [Creating a Super User section](#Creating-a-Super-User) to create a Super User.
-
 ```shell
 docker run -itd --name nautobot -p 8000:8000 networktocode/nautobot-lab
 ```
@@ -38,6 +29,8 @@ You are waiting for the container to be in a `healthy` state as shown below.
 ```text
 99c9312e0409   networktocode/nautobot-lab     "/usr/local/bin/supe…"   3 minutes ago   Up 3 minutes (healthy)   0.0.0.0:8000->8000/tcp, :::8000->8000/tcp
 ```
+
+Once Nautobot Lab is up and running, you will need to [create a Super User as shown in the section below](#Creating-a-Super-User).
 
 ## Building the container
 
@@ -82,6 +75,8 @@ At this point, Nautobot can be accessed at `http://localhost:8000` with the user
 Explore, test, create, destroy, do whatever you like in this lab instance of Nautobot.
 
 We assume that you will want to populate Nautobot Lab with data from your own environment. However, if you want to simply get it up and running with minimal effort, we provide a set of sandbox data. To load the sandbox data, execute:
+
+> Populating the database with sandbox data will destroy any data that you have created and load in the sandbox data. The user credentials for the sandbox data are **username:** *demo* and **password:** *nautobot*.
 
 `docker exec -it nautobot load-mock-data`
 

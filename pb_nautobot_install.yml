@@ -92,6 +92,3 @@
 
     - name: "RUN MIGRATE"
       ansible.builtin.command: "/usr/local/bin/nautobot-server migrate"
-
-    - name: "CREATE SUPERUSER"
-      ansible.builtin.command: "/opt/nautobot/templates/superuser.sh"
