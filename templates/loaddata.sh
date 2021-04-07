@@ -14,4 +14,4 @@ export PGPASSWORD=$DB_PASSWORD
 
 psql < /opt/nautobot/templates/nautobot_backup.dump
 
-nautobot-server invalidate all
+/opt/nautobot/bin/nautobot-server invalidate all

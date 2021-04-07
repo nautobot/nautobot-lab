@@ -66,29 +66,27 @@
 
     - name: "CREATE NAUTOBOT DIRECTORY"
       ansible.builtin.file:
-        name: "/opt/nautobot"
+        name: "{{ lookup('env', 'NAUTOBOT_ROOT') }}"
         mode: "0775"
         state: "directory"
 
-    - name: "RUN NAUTOBOT-SERVER INIT"
-      ansible.builtin.command: "/usr/local/bin/nautobot-server init"
+    - name: "INSTALL NAUTOBOT"
+      ansible.builtin.pip:
+        name: "nautobot=={{ lookup('env', 'NAUTOBOT_VERSION') }}"
+        virtualenv: "{{ lookup('env', 'NAUTOBOT_ROOT') }}"
+        virtualenv_command: "python3 -m venv"
 
-    - name: "CREATE NAUTOBOT CONFIG DIRECTORY"
-      ansible.builtin.file:
-        name: "/root/.nautobot"
-        owner: "root"
-        group: "root"
-        mode: "0755"
-        state: "directory"
+    - name: "RUN NAUTOBOT-SERVER INIT"
+      ansible.builtin.command: "{{ lookup('env', 'NAUTOBOT_ROOT') }}/bin/nautobot-server init"
 
     - name: "UPDATE NAUTOBOT CONFIG"
       ansible.builtin.template:
         src: "nautobot_config.py"
-        dest: "/root/.nautobot/nautobot_config.py"
+        dest: "{{ lookup('env', 'NAUTOBOT_ROOT') }}/nautobot_config.py"
         mode: "0644"
 
     - name: "RUN MAKEMIGRATIONS"
-      ansible.builtin.command: "/usr/local/bin/nautobot-server makemigrations"
+      ansible.builtin.command: "{{ lookup('env', 'NAUTOBOT_ROOT') }}/bin/nautobot-server makemigrations"
 
     - name: "RUN MIGRATE"
-      ansible.builtin.command: "/usr/local/bin/nautobot-server migrate"
+      ansible.builtin.command: "{{ lookup('env', 'NAUTOBOT_ROOT') }}/bin/nautobot-server migrate"
