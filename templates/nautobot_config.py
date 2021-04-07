@@ -45,7 +45,23 @@ RQ_QUEUES = {
     #         'socket_connect_timeout': 10,
     #     },
     # },
+    "webhooks": {
+        "HOST": "localhost",
+        "PORT": 6379,
+        "DB": 0,
+        "PASSWORD": "",
+        "SSL": False,
+        "DEFAULT_TIMEOUT": 300,
+    },
     "check_releases": {
+        "HOST": "localhost",
+        "PORT": 6379,
+        "DB": 0,
+        "PASSWORD": "",
+        "SSL": False,
+        "DEFAULT_TIMEOUT": 300,
+    },
+    "custom_fields": {
         "HOST": "localhost",
         "PORT": 6379,
         "DB": 0,
