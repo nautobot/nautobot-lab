@@ -12,6 +12,6 @@ psql -c "GRANT ALL ON SCHEMA public TO ${DB_USER}";
 export PGUSER=$DB_USER
 export PGPASSWORD=$DB_PASSWORD
 
-psql < /opt/nautobot/templates/nautobot_backup.dump
+psql < {{ nautobot_root }}/templates/nautobot_backup.dump
 
-nautobot-server invalidate all
+{{ nautobot_root }}/bin/nautobot-server invalidate all
