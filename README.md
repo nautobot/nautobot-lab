@@ -16,6 +16,8 @@ Building the container yourself isn't needed to get up and running quickly. The 
 docker run -itd --name nautobot -p 8000:8000 networktocode/nautobot-lab
 ```
 
+> If you've previously run `nautobot-lab` in the past, you may wish to first invoke `docker pull networktocode/nautobot-lab` to ensure that you have the latest version of this image!
+
 Because this image is an all-in-one container (with Nautobot, PostgreSQL, and Redis), it will take a few seconds to download the container, and then about 30 seconds more for all of the services to start and stabilize. Once the container has started and all services have stabilized, the web interface can be accessed via `http://localhost:8000`.
 
 If you wish, you can also check the health status of the container by running the following command:
