@@ -41,10 +41,13 @@ RUN apt-get update -y && \
 RUN pip3 install --no-cache-dir pip --upgrade && \
     pip install --no-cache-dir --requirement ./templates/requirements.txt
 
+# hadolint ignore=DL3059
 RUN ansible-galaxy collection install community.postgresql
 
+# hadolint ignore=DL3059
 RUN ansible-playbook pb_nautobot_install.yml
 
+# hadolint ignore=DL3059
 RUN pip uninstall -y ansible && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
