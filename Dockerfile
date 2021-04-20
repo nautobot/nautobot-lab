@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 ENV DEBCONF_NONINTERACTIVE_SEEN=true
 
-ENV NAUTOBOT_VERSION="1.0.0b3"
+ENV NAUTOBOT_VERSION="1.0.0b4"
 
 ENV NAUTOBOT_ROOT="/opt/nautobot"
 
@@ -26,9 +26,10 @@ COPY pb_nautobot_install.yml .
 
 COPY templates templates
 
+# hadolint ignore=DL3059
 RUN debconf-set-selections ./templates/tzseeds.txt
 
-# hadolint ignore=DL3008,DL3009
+# hadolint ignore=DL3008,DL3009,DL3059
 RUN apt-get update -y && \
     apt-get install -y python3 \
     python3-psycopg2 python3-pip \
@@ -36,14 +37,17 @@ RUN apt-get update -y && \
     python3-apt postgresql libpq-dev \
     redis-server systemctl git --no-install-recommends
 
-# hadolint ignore=DL3013
+# hadolint ignore=DL3013,DL3059
 RUN pip3 install --no-cache-dir pip --upgrade && \
     pip install --no-cache-dir --requirement ./templates/requirements.txt
 
+# hadolint ignore=DL3059
 RUN ansible-galaxy collection install community.postgresql
 
+# hadolint ignore=DL3059
 RUN ansible-playbook pb_nautobot_install.yml
 
+# hadolint ignore=DL3059
 RUN pip uninstall -y ansible && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
