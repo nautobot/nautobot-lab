@@ -34,7 +34,7 @@ RUN apt-get update -y && \
     apt-get install -y python3 \
     python3-psycopg2 python3-pip \
     python3-venv python3-dev \
-    python3-apt postgresql libpq-dev \
+    python3-apt postgresql-12 libpq-dev \
     redis-server systemctl git --no-install-recommends
 
 # hadolint ignore=DL3013,DL3059
