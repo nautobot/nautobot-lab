@@ -31,12 +31,12 @@ RUN debconf-set-selections ./templates/tzseeds.txt
 
 # hadolint ignore=DL3008,DL3009,DL3059
 RUN apt-get update -y && \
-    apt-get install -y python3 \
-    python3-psycopg2 python3-pip \
-    python3-venv python3-dev \
-    python3-apt postgresql \
-    postgresql-common postgresql-12 libpq-dev \
-    redis-server systemctl git --no-install-recommends
+    apt-get install -y apt-transport-https \
+    python3 python3-psycopg2 python3-pip \
+    python3-venv python3-dev python3-apt \
+    postgresql postgresql-common postgresql-12 \
+    libpq-dev redis-server systemctl git \
+    --no-install-recommends
 
 # hadolint ignore=DL3013,DL3059
 RUN pip3 install --no-cache-dir pip --upgrade && \
