@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM public.ecr.aws/ubuntu/ubuntu:20.04_stable 
 
 ENV NAUTOBOT_VERSION="1.0.2"
 
