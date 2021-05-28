@@ -1,4 +1,4 @@
-FROM ubuntu:20.10
+FROM ubuntu:20.04
 
 ENV NAUTOBOT_VERSION="1.0.2"
 
