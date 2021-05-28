@@ -26,6 +26,7 @@ COPY pb_nautobot_install.yml .
 
 COPY templates templates
 
+# hadolint ignore=DL3008,DL3013
 RUN apt-get update -y && \
     apt-get install -y tzdata --no-install-recommends && \
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
