@@ -18526,6 +18526,7 @@ COPY public.users_objectpermission_users (id, objectpermission_id, user_id) FROM
 --
 
 COPY public.users_token (id, created, expires, key, write_enabled, description, user_id) FROM stdin;
+5f060695-aec9-4dc1-95e4-35e1cd37fc3e	2021-06-01 20:36:39.073377+00	\N	aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	t		7dc759b4-bff4-4b0b-8072-35424b49a84a
 \.
 
 
