@@ -92,3 +92,18 @@
 
     - name: "RUN MIGRATE"
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server migrate"
+
+        #- name: "INSTALL NAUTOBOT PLUGINS"
+        #  ansible.builtin.pip:
+        #    name: "{{ item }}"
+        #    virtualenv: "{{ nautobot_root }}"
+        #    virtualenv_command: "python3 -m venv"
+        #  with_items:
+        #    - "nautobot-chatops"
+        #    - "nautobot-device-onboarding"
+        #    - "nautobot-circuit-maintenance"
+        #    - "nautobot-data-validation-engine"
+        #    - "nautobot-capacity-metrics"
+        #    - "nautobot-golden-config"
+        #    - "nautobot-plugin-nornir"
+        #    - "nautobot-netbox-importer"
