@@ -7,11 +7,15 @@ matrix:
 before_install:
 - pip install pip --upgrade
 install:
-- pip install yamllint
+- pip install yamllint pytest pynautobot
 script:
 - yamllint pb_nautobot_install.yml
 - docker run --rm -i hadolint/hadolint < Dockerfile
 - docker build -t networktocode/nautobot-lab:latest .
+- docker run -itd --name nautobot -p 127.0.0.0:8000:8000 networktocode/nautobot-lab:latest
+- sleep 30
+- docker exec -it nautobot load-mock-data
+- pytest tests/tests.py
 deploy:
 - provider: script
   script: bash ./deploy/docker.sh
