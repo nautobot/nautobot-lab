@@ -102,6 +102,7 @@
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server migrate"
 
     - name: "RUN NAUTOBOT-SERVER COLLECTSTATIC"
+      # yamllint disable-line rule:line-length
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server collectstatic"
 
         #- name: "INSTALL NAUTOBOT PLUGINS"
