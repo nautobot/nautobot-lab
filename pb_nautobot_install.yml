@@ -21,6 +21,14 @@
         group: "root"
         mode: "0640"
 
+    - name: "UPDATE UWSGI.INI"
+      ansible.builtin.template:
+        src: "uwsgi.ini"
+        dest: "/opt/nautobot/uwsgi.ini"
+        owner: "root"
+        group: "root"
+        mode: "0640"
+
     - name: "ADD LOAD MOCK DATA SCRIPT"
       ansible.builtin.template:
         src: "loaddata.sh"
@@ -92,6 +100,9 @@
 
     - name: "RUN MIGRATE"
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server migrate"
+
+    - name: "RUN NAUTOBOT-SERVER COLLECTSTATIC"
+      ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server collectstatic"
 
         #- name: "INSTALL NAUTOBOT PLUGINS"
         #  ansible.builtin.pip:
