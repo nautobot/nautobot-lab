@@ -13,6 +13,20 @@
     - name: "RUN SYSTEMCTL DAEMON-RELOAD"
       ansible.builtin.command: "systemctl daemon-reload"
 
+    - name: "CREATE NAUTOBOT GROUP"
+      ansible.builtin.group:
+        name: "nautobot"
+        state: "present"
+
+    - name: "CREATE NAUTOBOT USER"
+      ansible.builtin.user:
+        name: "nautobot"
+        comment: "Nautobot User"
+        group: "nautobot"
+        shell: "/bin/bash"
+        home: "{{ nautobot_root }}"
+        system: "yes"
+
     - name: "UPDATE SUPERVISORD.CONF"
       ansible.builtin.template:
         src: "supervisord.conf"
@@ -25,16 +39,16 @@
       ansible.builtin.template:
         src: "uwsgi.ini"
         dest: "/opt/nautobot/uwsgi.ini"
-        owner: "root"
-        group: "root"
+        owner: "nautobot"
+        group: "nautobot"
         mode: "0640"
 
     - name: "ADD LOAD MOCK DATA SCRIPT"
       ansible.builtin.template:
         src: "loaddata.sh"
         dest: "/usr/local/bin/load-mock-data"
-        owner: "root"
-        group: "root"
+        owner: "nautobot"
+        group: "nautobot"
         mode: "0755"
 
     - name: "UPDATE REDIS.CONF"
@@ -73,12 +87,6 @@
         priv: "ALL"
         state: "present"
 
-    - name: "CREATE NAUTOBOT DIRECTORY"
-      ansible.builtin.file:
-        name: "{{ nautobot_root }}"
-        mode: "0775"
-        state: "directory"
-
     - name: "INSTALL NAUTOBOT"
       ansible.builtin.pip:
         name: "nautobot=={{ lookup('env', 'NAUTOBOT_VERSION') }}"
@@ -92,6 +100,8 @@
       ansible.builtin.template:
         src: "nautobot_config.py"
         dest: "{{ nautobot_root }}/nautobot_config.py"
+        owner: "nautobot"
+        group: "nautobot"
         mode: "0644"
 
     - name: "RUN MAKEMIGRATIONS"
@@ -105,17 +115,26 @@
       # yamllint disable-line rule:line-length
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server collectstatic"
 
-        #- name: "INSTALL NAUTOBOT PLUGINS"
-        #  ansible.builtin.pip:
-        #    name: "{{ item }}"
-        #    virtualenv: "{{ nautobot_root }}"
-        #    virtualenv_command: "python3 -m venv"
-        #  with_items:
-        #    - "nautobot-chatops"
-        #    - "nautobot-device-onboarding"
-        #    - "nautobot-circuit-maintenance"
-        #    - "nautobot-data-validation-engine"
-        #    - "nautobot-capacity-metrics"
-        #    - "nautobot-golden-config"
-        #    - "nautobot-plugin-nornir"
-        #    - "nautobot-netbox-importer"
+    - name: "CREATE NAUTOBOT DIRECTORY"
+      ansible.builtin.file:
+        name: "{{ nautobot_root }}"
+        owner: "nautobot"
+        group: "nautobot"
+        mode: "0775"
+        state: "directory"
+        recurse: "yes"
+
+        # - name: "INSTALL NAUTOBOT PLUGINS"
+        #   ansible.builtin.pip:
+        #     name: "{{ item }}"
+        #     virtualenv: "{{ nautobot_root }}"
+        #     virtualenv_command: "python3 -m venv"
+        #   with_items:
+        #     - "nautobot-chatops"
+        #     - "nautobot-device-onboarding"
+        #     - "nautobot-circuit-maintenance"
+        #     - "nautobot-data-validation-engine"
+        #     - "nautobot-capacity-metrics"
+        #     - "nautobot-golden-config"
+        #     - "nautobot-plugin-nornir"
+        #     - "nautobot-netbox-importer"
