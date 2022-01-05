@@ -104,6 +104,21 @@
         group: "nautobot"
         mode: "0644"
 
+    - name: "INSTALL NAUTOBOT PLUGINS"
+      ansible.builtin.pip:
+        name: "{{ item }}"
+        virtualenv: "{{ nautobot_root }}"
+        virtualenv_command: "python3 -m venv"
+      with_items:
+        # - "nautobot-chatops"
+        - "nautobot-device-onboarding"
+        # - "nautobot-circuit-maintenance"
+        # - "nautobot-data-validation-engine"
+        # - "nautobot-capacity-metrics"
+        # - "nautobot-golden-config"
+        # - "nautobot-plugin-nornir"
+        # - "nautobot-netbox-importer"
+
     - name: "RUN MAKEMIGRATIONS"
       # yamllint disable-line rule:line-length
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server makemigrations"
@@ -124,17 +139,10 @@
         state: "directory"
         recurse: "yes"
 
-        # - name: "INSTALL NAUTOBOT PLUGINS"
-        #   ansible.builtin.pip:
-        #     name: "{{ item }}"
-        #     virtualenv: "{{ nautobot_root }}"
-        #     virtualenv_command: "python3 -m venv"
-        #   with_items:
-        #     - "nautobot-chatops"
-        #     - "nautobot-device-onboarding"
-        #     - "nautobot-circuit-maintenance"
-        #     - "nautobot-data-validation-engine"
-        #     - "nautobot-capacity-metrics"
-        #     - "nautobot-golden-config"
-        #     - "nautobot-plugin-nornir"
-        #     - "nautobot-netbox-importer"
+    - name: "ADD LOCAL REQUIREMENTS FILE"
+      ansible.builtin.template:
+        src: "local_requirements.txt"
+        dest: "{{ nautobot_root }}/local_requirements.txt"
+        owner: "nautobot"
+        group: "nautobot"
+        mode: "0755"

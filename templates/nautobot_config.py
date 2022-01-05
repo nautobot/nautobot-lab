@@ -12,7 +12,7 @@ from nautobot.core.settings import *  # noqa F401,F403
 # access to the server via any other hostnames. The first FQDN in the list will be treated as the preferred name.
 #
 # Example: ALLOWED_HOSTS = ['nautobot.example.com', 'nautobot.internal.local']
-ALLOWED_HOSTS = {{ allowed_hosts }} 
+ALLOWED_HOSTS = {{allowed_hosts}}
 
 # PostgreSQL database configuration. See the Django documentation for a complete list of available parameters:
 #   https://docs.djangoproject.com/en/stable/ref/settings/#databases
@@ -20,7 +20,9 @@ DATABASES = {
     "default": {
         "NAME": os.getenv("DB_NAME", "{{ nautobot_db_name }}"),  # Database name
         "USER": os.getenv("DB_USER", "{{ nautobot_db_username }}"),  # Database username
-        "PASSWORD": os.getenv("DB_PASSWORD", "{{ nautobot_db_password }}"),  # Datbase password
+        "PASSWORD": os.getenv(
+            "DB_PASSWORD", "{{ nautobot_db_password }}"
+        ),  # Datbase password
         "HOST": os.getenv("DB_HOST", "localhost"),  # Database server
         "PORT": os.getenv("DB_PORT", ""),  # Database port (leave blank for default)
         "CONN_MAX_AGE": 300,  # Database timeout
@@ -31,7 +33,14 @@ DATABASES = {
 # Nautobot uses RQ for task scheduling. These are the following defaults.
 # For detailed configuration see: https://github.com/rq/django-rq#installation
 RQ_QUEUES = {
-    "default": {"HOST": "localhost", "PORT": 6379, "DB": 0, "PASSWORD": "", "SSL": False, "DEFAULT_TIMEOUT": 300},
+    "default": {
+        "HOST": "localhost",
+        "PORT": 6379,
+        "DB": 0,
+        "PASSWORD": "",
+        "SSL": False,
+        "DEFAULT_TIMEOUT": 300,
+    },
     # "with-sentinel": {
     #     "SENTINELS": [
     #         ("mysentinel.redis.example.com", 6379)
@@ -223,7 +232,7 @@ NAPALM_ARGS = {}
 PAGINATE_COUNT = 50
 
 # Enable installed plugins. Add the name of each plugin to the list.
-PLUGINS = []
+PLUGINS = ["nautobot_device_onboarding"]
 
 # Plugins configuration settings. These settings are used by various plugins that the user may have installed.
 # Each key in the dictionary is the name of an installed plugin and its value is a dictionary of settings.
