@@ -119,7 +119,7 @@
         - "nautobot-chatops"
         - "nautobot-capacity-metrics"
         - "nautobot-netbox-importer"
-        # - "nautobot-circuit-maintenance"
+        - "nautobot-circuit-maintenance"
 
     - name: "RUN MAKEMIGRATIONS"
       # yamllint disable-line rule:line-length
