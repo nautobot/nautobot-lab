@@ -1,1 +1,8 @@
 nautobot-device-onboarding
+nautobot-golden-config
+nautobot-plugin-nornir
+nautobot-chatops
+nautobot-circuit-maintenance
+nautobot-data-validation-engine
+nautobot-capacity-metrics
+nautobot-netbox-importer

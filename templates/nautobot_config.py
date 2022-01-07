@@ -232,16 +232,47 @@ NAPALM_ARGS = {}
 PAGINATE_COUNT = 50
 
 # Enable installed plugins. Add the name of each plugin to the list.
-PLUGINS = ["nautobot_device_onboarding"]
+PLUGINS = [
+    "nautobot_device_onboarding",
+    "nautobot_plugin_nornir",
+    "nautobot_golden_config",
+    "nautobot_chatops",
+    "nautobot_capacity_metrics",
+    "nautobot_netbox_importer",
+    "nautobot_circuit_maintenance",
+]
 
 # Plugins configuration settings. These settings are used by various plugins that the user may have installed.
 # Each key in the dictionary is the name of an installed plugin and its value is a dictionary of settings.
-# PLUGINS_CONFIG = {
-#     'my_plugin': {
-#         'foo': 'bar',
-#         'buzz': 'bazz'
-#     }
-# }
+PLUGINS_CONFIG = {
+    "nautobot_device_onboarding": {
+        "default_ip_status": "Active",
+        "default_device_role": "leaf",
+        "skip_device_type_on_update": True,
+    },
+    "nautobot_plugin_nornir": {
+        "nornir_settings": {
+            "credentials": "nautobot_plugin_nornir.plugins.credentials.env_vars.CredentialsEnvVars",
+            "runner": {
+                "plugin": "threaded",
+                "options": {
+                    "num_workers": 20,
+                },
+            },
+        },
+    },
+    "nautobot_golden_config": {
+        "per_feature_bar_width": 0.15,
+        "per_feature_width": 13,
+        "per_feature_height": 4,
+        "enable_backup": True,
+        "enable_compliance": True,
+        "enable_intended": True,
+        "enable_sotagg": True,
+        "sot_agg_transposer": None,
+        "default_drivers_mapping": None,
+    },
+}
 
 # When determining the primary IP address for a device, IPv6 is preferred over IPv4 by default. Set this to True to
 # prefer IPv4 instead.

@@ -104,20 +104,22 @@
         group: "nautobot"
         mode: "0644"
 
-    - name: "INSTALL NAUTOBOT PLUGINS"
+    - name: "BECOME NAUTOBOT USER"
+      ansible.builtin.command: "su - nautobot"
+
+    - name: "INSTALL NAUTOBOT PLUGINS WITH PIP3"
       ansible.builtin.pip:
         name: "{{ item }}"
         virtualenv: "{{ nautobot_root }}"
         virtualenv_command: "python3 -m venv"
       with_items:
-        # - "nautobot-chatops"
         - "nautobot-device-onboarding"
-        # - "nautobot-circuit-maintenance"
-        # - "nautobot-data-validation-engine"
-        # - "nautobot-capacity-metrics"
-        # - "nautobot-golden-config"
-        # - "nautobot-plugin-nornir"
-        # - "nautobot-netbox-importer"
+        - "nautobot-golden-config"
+        - "nautobot-plugin-nornir"
+        - "nautobot-chatops"
+        - "nautobot-capacity-metrics"
+        - "nautobot-netbox-importer"
+        - "nautobot-circuit-maintenance"
 
     - name: "RUN MAKEMIGRATIONS"
       # yamllint disable-line rule:line-length

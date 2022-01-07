@@ -82,6 +82,50 @@ We assume that you will want to populate Nautobot Lab with data from your own en
 
 `docker exec -it nautobot load-mock-data`
 
+## Nautobot Plugins
+
+The following plugins are pre-installed in the Nautobot Lab container:
+
+- `nautobot-device-onboarding`
+- `nautobot-circuit-maintenance`
+- `nautobot-data-validation-engine`
+- `nautobot-capacity-metrics`
+- `nautobot-golden-config`
+- `nautobot-plugin-nornir`
+- `nautobot-netbox-importer`
+
+The plugins are configured in `nautobot_config.py`.
+
+If you want to add more plugins, here are the steps:
+
+1. Edit `pb_nautobot.yml` and add a plugin item in the list:
+
+```yaml
+- name: "INSTALL NAUTOBOT PLUGINS"
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    virtualenv: "{{ nautobot_root }}"
+    virtualenv_command: "python3 -m venv"
+    with_items:
+        - "my-plugin"
+```
+
+2. Edit `local_requirements.txt` to include the plugin name for persistence.
+
+3. Edit the `nautobot_config.py` and add the plugin to the list of plugins:
+
+```python
+PLUGINS = ["my-plugin]
+```
+
+4. Add any other plugin configuration parameters in `nautobot_config.py`.
+
+5. Finally, rebuild the container:
+
+```bash
+docker build -t nautobot-lab:latest .
+```
+
 If you have any questions, don't hesitate to reach out in the #Nautobot channel on the [Network To Code Slack instance](https://networktocode.slack.com), we'll be happy to assist you!
 
 If you're not a member, you can join the Slack instance [here](http://slack.networktocode.com/).
