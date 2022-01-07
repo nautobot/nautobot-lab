@@ -93,6 +93,7 @@ The following plugins are pre-installed in the Nautobot Lab container:
 - `nautobot-golden-config`
 - `nautobot-plugin-nornir`
 - `nautobot-netbox-importer`
+- `nautobot-chatops`
 
 The plugins are configured in `nautobot_config.py`.
 

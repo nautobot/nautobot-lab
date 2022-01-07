@@ -107,7 +107,7 @@
     - name: "BECOME NAUTOBOT USER"
       ansible.builtin.command: "su - nautobot"
 
-    - name: "INSTALL NAUTOBOT PLUGINS WITH PIP3"
+    - name: "INSTALL NAUTOBOT PLUGINS"
       ansible.builtin.pip:
         name: "{{ item }}"
         virtualenv: "{{ nautobot_root }}"
@@ -119,7 +119,7 @@
         - "nautobot-chatops"
         - "nautobot-capacity-metrics"
         - "nautobot-netbox-importer"
-        - "nautobot-circuit-maintenance"
+        # - "nautobot-circuit-maintenance"
 
     - name: "RUN MAKEMIGRATIONS"
       # yamllint disable-line rule:line-length

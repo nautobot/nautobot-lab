@@ -272,6 +272,16 @@ PLUGINS_CONFIG = {
         "sot_agg_transposer": None,
         "default_drivers_mapping": None,
     },
+    "nautobot_circuit_maintenance": {
+        "raw_notification_initial_days_since": 100,
+        "raw_notification_size": 16384,
+        "notification_sources": [
+            {
+                "name": "my custom name",
+                "url": os.getenv("CM_NS_1_URL", ""),
+            }
+        ],
+    },
 }
 
 # When determining the primary IP address for a device, IPv6 is preferred over IPv4 by default. Set this to True to
