@@ -1,4 +1,4 @@
-ansible==4.2.0
+ansible==5.0.0a1
 supervisor==4.2.2
 pynautobot==1.0.2
 pytest==6.2.4
