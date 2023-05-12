@@ -209,8 +209,8 @@ MAX_PAGE_SIZE = 1000
 METRICS_ENABLED = False
 
 # Credentials that Nautobot will uses to authenticate to devices when connecting via NAPALM.
-NAPALM_USERNAME = ""
-NAPALM_PASSWORD = ""
+NAPALM_USERNAME = os.getenv("NAPALM_USERNAME", "")
+NAPALM_PASSWORD = os.getenv("NAPALM_PASSWORD", "")
 
 # NAPALM timeout (in seconds). (Default: 30)
 NAPALM_TIMEOUT = 30
@@ -223,7 +223,14 @@ NAPALM_ARGS = {}
 PAGINATE_COUNT = 50
 
 # Enable installed plugins. Add the name of each plugin to the list.
-PLUGINS = []
+PLUGINS = [
+    "nautobot_device_onboarding",
+    "nautobot_circuit_maintenance",
+    "nautobot_data_validation_engine",
+    "nautobot_capacity_metrics",
+    "nautobot_golden_config",
+    "nautobot_plugin_nornir"
+]
 
 # Plugins configuration settings. These settings are used by various plugins that the user may have installed.
 # Each key in the dictionary is the name of an installed plugin and its value is a dictionary of settings.
@@ -233,6 +240,56 @@ PLUGINS = []
 #         'buzz': 'bazz'
 #     }
 # }
+PLUGINS_CONFIG = {
+    "nautobot_device_onboarding": {},
+    "nautobot_circuit_maintenance": {
+        "raw_notification_initial_days_since": 100,
+        "raw_notification_size": 16384,
+        "dashboard_n_days": 30,
+        "overlap_job_exclude_no_impact": False,
+        "notification_sources": []
+    },
+    "nautobot_data_validation_engine": {},
+    "nautobot_capacity_metrics": {
+        "app_metrics": {
+            "models": {
+                "dcim": {"Site": True, "Rack": True, "Device": True},
+                "ipam": {"IPAddress": True, "Prefix": True},
+             },
+             "jobs": True,
+             "queues": True,
+             "versions": {
+               "basic": True,
+               "plugins": True,
+            }
+        }
+    },
+    "nautobot_golden_config": {
+        "per_feature_bar_width": 0.15,
+        "per_feature_width": 13,
+        "per_feature_height": 4,
+        "enable_backup": True,
+        "enable_compliance": True,
+        "enable_intended": True,
+        "enable_sotagg": True,
+        "sot_agg_transposer": None,
+        "enable_postprocessing": False,
+        "postprocessing_callables": [],
+        "postprocessing_subscribed": [],
+        "platform_slug_map": None,
+    },
+    "nautobot_plugin_nornir": {
+        "nornir_settings": {
+            "credentials": "nautobot_plugin_nornir.plugins.credentials.env_vars.CredentialsEnvVars",
+            "runner": {
+                "plugin": "threaded",
+                "options": {
+                    "num_workers": 20,
+                },
+            },
+        },
+    }
+}
 
 # When determining the primary IP address for a device, IPv6 is preferred over IPv4 by default. Set this to True to
 # prefer IPv4 instead.

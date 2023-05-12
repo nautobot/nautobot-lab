@@ -79,14 +79,21 @@
         priv: "ALL"
         state: "present"
 
-    - name: "INSTALL NAUTOBOT"
+    - name: "INSTALL NAUTOBOT AND PLUGINS"
       ansible.builtin.pip:
-        name: "nautobot=={{ lookup('env', 'NAUTOBOT_VERSION') }}"
+        name: "{{ nautobot_item }}"
         virtualenv: "{{ nautobot_root }}"
         virtualenv_command: "python3 -m venv"
-
-    - name: "RUN NAUTOBOT-SERVER INIT"
-      ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server init"
+      loop:
+        - "nautobot=={{ lookup('env', 'NAUTOBOT_VERSION') }}"
+        - "nautobot-device-onboarding"
+        - "nautobot-circuit-maintenance"
+        - "nautobot-data-validation-engine"
+        - "nautobot-capacity-metrics"
+        - "nautobot-golden-config"
+        - "nautobot-plugin-nornir"
+      loop_control:
+        loop_var: "nautobot_item"
 
     - name: "UPDATE NAUTOBOT CONFIG"
       ansible.builtin.template:
@@ -96,10 +103,6 @@
         group: "nautobot"
         mode: "0644"
 
-    - name: "RUN MAKEMIGRATIONS"
-      # yamllint disable-line rule:line-length
-      ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server makemigrations"
-
     - name: "RUN MIGRATE"
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server migrate"
 
@@ -107,31 +110,15 @@
       # yamllint disable-line rule:line-length
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server collectstatic"
 
-    - name: "CREATE NAUTOBOT DIRECTORY"
-      ansible.builtin.file:
-        name: "{{ nautobot_root }}"
-        owner: "nautobot"
-        group: "nautobot"
-        mode: "0775"
-        state: "directory"
-        recurse: "yes"
-
-    - name: "INSTALL NAUTOBOT PLUGINS"
-      ansible.builtin.pip:
-        name: "{{ plugin_item }}"
-        virtualenv: "{{ nautobot_root }}"
-        virtualenv_command: "python3 -m venv"
-      loop:
-        - "nautobot-device-onboarding"
-        - "nautobot-circuit-maintenance"
-        - "nautobot-data-validation-engine"
-        - "nautobot-capacity-metrics"
-        - "nautobot-golden-config"
-        - "nautobot-plugin-nornir"
-        - "nautobot-secrets-providers"
-      loop_control:
-        loop_var: "plugin_item"
-
     - name: "RUN NAUTOBOT-SERVER POST_UPGRADE"
       # yamllint disable-line rule:line-length
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server post_upgrade"
+
+    - name: "SET NAUTOBOT DIRECTORY PERMISSIONS"
+      ansible.builtin.file:
+        path: "{{ nautobot_root }}"
+        owner: "nautobot"
+        group: "nautobot"
+        mode: u=rwX,g=rX,o=rX
+        recurse: "yes"
+
