@@ -1,0 +1,21 @@
+---
+name: "CI"
+on: # yamllint disable
+  push:
+    branches:
+      - "main"
+  pull_request:
+  releases:
+    type:
+      - "published"
+
+jobs:
+  lint:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "CHECKOUT REPOSITORY CODE"
+        uses: "actions/checkout@v2"
+      - name: "SETUP ENVIRONMENT"
+        uses: "networktocode/gh-action-setup-poetry-environment@v4"
+      - name: "RUN YAML LINT ON ANSIBLE PLAYBOOK"
+        run: "poetry run yamllint pb_nautobot_install.yml"

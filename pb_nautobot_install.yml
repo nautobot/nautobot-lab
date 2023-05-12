@@ -43,14 +43,6 @@
         group: "nautobot"
         mode: "0640"
 
-    - name: "ADD LOAD MOCK DATA SCRIPT"
-      ansible.builtin.template:
-        src: "loaddata.sh"
-        dest: "/usr/local/bin/load-mock-data"
-        owner: "nautobot"
-        group: "nautobot"
-        mode: "0755"
-
     - name: "UPDATE REDIS.CONF"
       ansible.builtin.template:
         src: "redis.conf"
@@ -124,17 +116,22 @@
         state: "directory"
         recurse: "yes"
 
-        # - name: "INSTALL NAUTOBOT PLUGINS"
-        #   ansible.builtin.pip:
-        #     name: "{{ item }}"
-        #     virtualenv: "{{ nautobot_root }}"
-        #     virtualenv_command: "python3 -m venv"
-        #   with_items:
-        #     - "nautobot-chatops"
-        #     - "nautobot-device-onboarding"
-        #     - "nautobot-circuit-maintenance"
-        #     - "nautobot-data-validation-engine"
-        #     - "nautobot-capacity-metrics"
-        #     - "nautobot-golden-config"
-        #     - "nautobot-plugin-nornir"
-        #     - "nautobot-netbox-importer"
+    - name: "INSTALL NAUTOBOT PLUGINS"
+      ansible.builtin.pip:
+        name: "{{ plugin_item }}"
+        virtualenv: "{{ nautobot_root }}"
+        virtualenv_command: "python3 -m venv"
+      loop:
+        - "nautobot-device-onboarding"
+        - "nautobot-circuit-maintenance"
+        - "nautobot-data-validation-engine"
+        - "nautobot-capacity-metrics"
+        - "nautobot-golden-config"
+        - "nautobot-plugin-nornir"
+        - "nautobot-secrets-providers"
+      loop_control:
+        loop_var: "plugin_item"
+
+    - name: "RUN NAUTOBOT-SERVER POST_UPGRADE"
+      # yamllint disable-line rule:line-length
+      ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server post_upgrade"

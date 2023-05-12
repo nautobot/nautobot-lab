@@ -1,0 +1,40 @@
+[[package]]
+name = "pathspec"
+version = "0.11.1"
+description = "Utility library for gitignore style pattern matching of file paths."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
+name = "pyyaml"
+version = "6.0"
+description = "YAML parser and emitter for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
+name = "yamllint"
+version = "1.31.0"
+description = "A linter for YAML files."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+pathspec = ">=0.5.3"
+pyyaml = "*"
+
+[package.extras]
+dev = ["doc8", "flake8", "flake8-import-order", "rstcheck", "sphinx"]
+
+[metadata]
+lock-version = "1.1"
+python-versions = "^3.9"
+content-hash = "27d8383c411133acc56e970ad9251c21bb07516254da9ddb1fdd8e5cee7036ac"
+
+[metadata.files]
+pathspec = []
+pyyaml = []
+yamllint = []
