@@ -16,5 +16,20 @@ jobs:
         uses: "actions/checkout@v2"
       - name: "SETUP ENVIRONMENT"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
-      - name: "RUN YAML LINT ON ANSIBLE PLAYBOOK"
+      - name: "RUN YAMLLINT ON ANSIBLE PLAYBOOK"
         run: "poetry run yamllint pb_nautobot_install.yml"
+      - name: "RUN HADOLINT ON DOCKERFILE"
+        uses: "hadolint/hadolint-action@v3.1.0"
+        with:
+          dockerfile: Dockerfile
+  test:
+    run-on: "ubuntu-latest"
+    steps:
+      - name: "CHECKOUT REPOSITORY CODE"
+        uses: "actions/checkout@v2"
+      - name: "BUILD NAUTOBOT-LAB CONTAINER"
+        run: "docker build -t networktocode/nautobot-lab:latest"
+      - name: "START NAUTOBOT-LAB CONTAINER"
+        run: "docker run -itd --name nautobot networktocode/nautobot-lab:latest"
+      - name: "TEST NAUTOBOT-LAB CONTAINER"
+        run: "docker exec -it nautobot pytest ./templates/tests/tests.py"
