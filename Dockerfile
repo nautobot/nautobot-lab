@@ -39,10 +39,10 @@ RUN apt-get update -y && \
       python3-venv python3-dev python3-apt postgresql-12 \
       libpq-dev redis-server systemctl git --no-install-recommends && \
     pip3 install --no-cache-dir pip setuptools wheel --upgrade && \
-    pip install --no-cache-dir --requirement ./templates/requirements.txt && \
+    pip3 install --no-cache-dir --requirement ./templates/requirements.txt && \
     ansible-galaxy collection install community.postgresql && \
     ansible-playbook pb_nautobot_install.yml && \
-    pip uninstall -y ansible && \
+    pip3 uninstall -y ansible && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -54,4 +54,4 @@ VOLUME /var/lib/postgresql/12/main
 
 HEALTHCHECK CMD supervisorctl status || exit 1
 
-CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisord.conf"]
+CMD ["sh", "-c", "${NAUTOBOT_ROOT}/bin/supervisord", "-c", "/etc/supervisord.conf"]

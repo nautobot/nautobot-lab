@@ -92,6 +92,7 @@
         - "nautobot-capacity-metrics"
         - "nautobot-golden-config"
         - "nautobot-plugin-nornir"
+        - "supervisor"
       loop_control:
         loop_var: "nautobot_item"
 

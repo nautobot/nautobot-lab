@@ -7,10 +7,8 @@ import pytest
 def nautobot():
     token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     create_token = [
-        "u=User(username='demo', password='nautobot', is_staff=True, is_superuser=True)",
-        "u.validated_save()",
-        f"t=Token.objects(key='{token}', user_id=u.pk, write_enabled=True)",
-        "t.validated_save()"
+        "u=User.objects.get_or_create(username='demo', password='nautobot', is_staff=True, is_superuser=True)",
+        f"Token.objects.get_or_create(key='{token}', user_id=u[0].pk, write_enabled=True)",
     ]
     nautobot_shell = [
         "nautobot-server",
