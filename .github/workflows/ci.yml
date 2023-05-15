@@ -28,7 +28,7 @@ jobs:
       - name: "CHECKOUT REPOSITORY CODE"
         uses: "actions/checkout@v2"
       - name: "BUILD NAUTOBOT-LAB CONTAINER"
-        run: "docker build -t networktocode/nautobot-lab:latest"
+        run: "docker build -t networktocode/nautobot-lab:latest ."
       - name: "START NAUTOBOT-LAB CONTAINER"
         run: "docker run -itd --name nautobot networktocode/nautobot-lab:latest"
       - name: "TEST NAUTOBOT-LAB CONTAINER"

@@ -38,7 +38,7 @@ RUN apt-get update -y && \
     apt-get install -y python3 python3-psycopg2 python3-pip \
       python3-venv python3-dev python3-apt postgresql-12 \
       libpq-dev redis-server systemctl git --no-install-recommends && \
-    pip3 install --no-cache-dir pip --upgrade && \
+    pip3 install --no-cache-dir pip setuptools wheel --upgrade && \
     pip install --no-cache-dir --requirement ./templates/requirements.txt && \
     ansible-galaxy collection install community.postgresql && \
     ansible-playbook pb_nautobot_install.yml && \
