@@ -31,5 +31,7 @@ jobs:
         run: "docker build -t networktocode/nautobot-lab:latest ."
       - name: "START NAUTOBOT-LAB CONTAINER"
         run: "docker run -itd --name nautobot networktocode/nautobot-lab:latest"
+      - name: "PAUSE TO ALLOW THE CONTAINER TO BOOT"
+        run: "sleep 30"
       - name: "TEST NAUTOBOT-LAB CONTAINER"
-        run: "docker exec -it nautobot pytest ./templates/tests/tests.py"
+        run: "docker exec -t nautobot pytest ./templates/tests/tests.py"
