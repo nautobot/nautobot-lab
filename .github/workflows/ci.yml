@@ -17,7 +17,7 @@ jobs:
       - name: "SETUP ENVIRONMENT"
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "RUN YAMLLINT ON ANSIBLE PLAYBOOK"
-        run: "poetry run yamllint pb_nautobot_install.yml"
+        run: "poetry run yamllint ."
       - name: "RUN HADOLINT ON DOCKERFILE"
         uses: "hadolint/hadolint-action@v3.1.0"
         with:
