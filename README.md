@@ -70,17 +70,27 @@ Password (again):
 Superuser created successfully.
 ```
 
+## Installed Applications
+
+The Nautobot Lab container comes with the following applications pre-installed:
+* [Device Onboarding](https://docs.nautobot.com/projects/device-onboarding/en/latest/user/app_overview/)
+* [Circuit Maintenance](https://docs.nautobot.com/projects/circuit-maintenance/en/latest/user/app_overview/)
+* [Data Validation](https://docs.nautobot.com/projects/data-validation/en/latest/user/app_overview/)
+* [Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics)
+* [Golden Config](https://docs.nautobot.com/projects/golden-config/en/latest/user/app_overview/)
+* [Nornir](https://docs.nautobot.com/projects/plugin-nornir/en/latest/user/app_overview/)
+
+These applications can give you a sense of what is possible with Nautobot as a network automation platform and can assist you with populating the lab environment with data that is unique to you. For the applications that require access to network devices, you can set the `NAPALM_USERNAME` AND `NAPALM_PASSWORD` environment variables when starting the container.
+
+```shell
+docker run -itd --name nautobot -p 8000:8000 --env NAPALM_USERNAME="demouser" --env NAPALM_PASSWORD="demopass" networktocode/nautobot-lab:latest
+```
+
 ## Kick the Tires
 
 At this point, Nautobot can be accessed at `http://localhost:8000` with the user credentials that were created.
 
 Explore, test, create, destroy, do whatever you like in this lab instance of Nautobot.
-
-We assume that you will want to populate Nautobot Lab with data from your own environment. However, if you want to simply get it up and running with minimal effort, we provide a set of sandbox data. To load the sandbox data, execute:
-
-> Populating the database with sandbox data will destroy any data that you have created and load in the sandbox data. The user credentials for the sandbox data are **username:** *demo* and **password:** *nautobot*.
-
-`docker exec -it nautobot load-mock-data`
 
 If you have any questions, don't hesitate to reach out in the #Nautobot channel on the [Network To Code Slack instance](https://networktocode.slack.com), we'll be happy to assist you!
 

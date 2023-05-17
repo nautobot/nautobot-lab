@@ -1,6 +1,5 @@
 import pytest
 
 
-def test_dcim_devices(nautobot):
-    devices = nautobot.dcim.devices
-    assert len(devices.all()) > 1
+def test_installed_plugins(nautobot):
+    assert len(nautobot.plugins.installed_plugins()) > 1

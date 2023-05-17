@@ -43,14 +43,6 @@
         group: "nautobot"
         mode: "0640"
 
-    - name: "ADD LOAD MOCK DATA SCRIPT"
-      ansible.builtin.template:
-        src: "loaddata.sh"
-        dest: "/usr/local/bin/load-mock-data"
-        owner: "nautobot"
-        group: "nautobot"
-        mode: "0755"
-
     - name: "UPDATE REDIS.CONF"
       ansible.builtin.template:
         src: "redis.conf"
@@ -87,14 +79,22 @@
         priv: "ALL"
         state: "present"
 
-    - name: "INSTALL NAUTOBOT"
+    - name: "INSTALL NAUTOBOT AND PLUGINS"
       ansible.builtin.pip:
-        name: "nautobot=={{ lookup('env', 'NAUTOBOT_VERSION') }}"
+        name: "{{ nautobot_item }}"
         virtualenv: "{{ nautobot_root }}"
         virtualenv_command: "python3 -m venv"
-
-    - name: "RUN NAUTOBOT-SERVER INIT"
-      ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server init"
+      loop:
+        - "nautobot=={{ lookup('env', 'NAUTOBOT_VERSION') }}"
+        - "nautobot-device-onboarding"
+        - "nautobot-circuit-maintenance"
+        - "nautobot-data-validation-engine"
+        - "nautobot-capacity-metrics"
+        - "nautobot-golden-config"
+        - "nautobot-plugin-nornir"
+        - "supervisor"
+      loop_control:
+        loop_var: "nautobot_item"
 
     - name: "UPDATE NAUTOBOT CONFIG"
       ansible.builtin.template:
@@ -104,10 +104,6 @@
         group: "nautobot"
         mode: "0644"
 
-    - name: "RUN MAKEMIGRATIONS"
-      # yamllint disable-line rule:line-length
-      ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server makemigrations"
-
     - name: "RUN MIGRATE"
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server migrate"
 
@@ -115,26 +111,15 @@
       # yamllint disable-line rule:line-length
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server collectstatic"
 
-    - name: "CREATE NAUTOBOT DIRECTORY"
+    - name: "RUN NAUTOBOT-SERVER POST_UPGRADE"
+      # yamllint disable-line rule:line-length
+      ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server post_upgrade"
+
+    - name: "SET NAUTOBOT DIRECTORY PERMISSIONS"
       ansible.builtin.file:
-        name: "{{ nautobot_root }}"
+        path: "{{ nautobot_root }}"
         owner: "nautobot"
         group: "nautobot"
-        mode: "0775"
-        state: "directory"
+        mode: u=rwX,g=rX,o=rX
         recurse: "yes"
 
-        # - name: "INSTALL NAUTOBOT PLUGINS"
-        #   ansible.builtin.pip:
-        #     name: "{{ item }}"
-        #     virtualenv: "{{ nautobot_root }}"
-        #     virtualenv_command: "python3 -m venv"
-        #   with_items:
-        #     - "nautobot-chatops"
-        #     - "nautobot-device-onboarding"
-        #     - "nautobot-circuit-maintenance"
-        #     - "nautobot-data-validation-engine"
-        #     - "nautobot-capacity-metrics"
-        #     - "nautobot-golden-config"
-        #     - "nautobot-plugin-nornir"
-        #     - "nautobot-netbox-importer"
