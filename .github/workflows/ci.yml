@@ -23,7 +23,7 @@ jobs:
         with:
           dockerfile: Dockerfile
   test:
-    run-on: "ubuntu-latest"
+    runs-on: "ubuntu-latest"
     steps:
       - name: "CHECKOUT REPOSITORY CODE"
         uses: "actions/checkout@v2"
