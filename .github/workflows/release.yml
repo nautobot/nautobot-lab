@@ -1,0 +1,32 @@
+---
+name: "RELEASE"
+
+on: # yamllint disable
+  release:
+    types: [created]
+
+jobs:
+  release:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "CHECKOUT REPOSITORY"
+        uses: "actions/checkout@v2"
+
+      - name: "SETUP DOCKER BUILDX"
+        uses: "docker/setup-buildx-action@v1"
+
+      - name: "LOGIN TO DOCKER HUB"
+        uses: "docker/login-action@v1"
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: "BUILD AND PUSH NAUTOBOT-LAB DOCKER IMAGE"
+        uses: "docker/build-push-action@v2"
+        with:
+          context: .
+          push: true
+          tags: |
+            networktocode/nautobot-lab:latest
+            networktocode/nautobot-lab:${{ github.event.release.tag_name }}
