@@ -1,0 +1,87 @@
+---
+name: Update and Build Nautobot Lab Container
+
+on:  # yamllint disable-line rule:truthy
+  schedule:
+    - cron: "0 0 * * *"
+
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  HUB_URL: "https://hub.docker.com/v2/repositories/networktocode/nautobot-lab"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get latest Nautobot release
+        id: get_nautobot_release
+        run: |
+          latest_release=$(curl -s \
+            https://api.github.com/repos/nautobot/nautobot/releases/latest \
+            | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+          echo "::set-output name=version::$latest_release"
+
+      - name: Get Nautobot Lab tags
+        id: get_nautobot_lab_tags
+        run: |
+          page=1
+          while true; do
+            tags=$(curl -s "$HUB_URL/tags/?page=$page" \
+              | jq -r '.results[].name')
+            if [[ $tags =~ "latest" ]]; then
+              page=$((page + 1))
+            else
+              echo "::set-output name=tags::$tags"
+              break
+            fi
+          done
+
+      - name: Check Nautobot Lab tags
+        id: check_nautobot_lab_tags
+        run: |
+          nautobot_lab_tags="${{ steps.get_nautobot_lab_tags.outputs.tags }}"
+          non_latest_tag=""
+          for tag in $nautobot_lab_tags; do
+            if [[ "$tag" != "latest" ]]; then
+              non_latest_tag="$tag"
+              break
+            fi
+          done
+
+          if [[ -z "$non_latest_tag" ]]; then
+            echo "No non-latest tag found for Nautobot Lab. Exiting gracefully."
+            exit 0
+          else
+            echo "::set-output name=tag::$non_latest_tag"
+          fi
+
+      - name: Compare versions and set environment variable
+        id: compare_versions
+        run: |
+          nautobot_version="${{ steps.get_nautobot_release.outputs.version }}"
+          nautobot_lab_tag="${{ steps.check_nautobot_lab_tags.outputs.tag }}"
+
+          if [[ "$nautobot_version" == "$nautobot_lab_tag" ]]; then
+            echo "Nautobot and Nautobot Lab versions match. Exiting gracefully."
+            exit 0
+          else
+            echo "::set-env name=NAUTOBOT_VERSION::$nautobot_version"
+          fi
+
+      - name: Build and push Nautobot Lab images
+        env:
+          NAUTOBOT_VERSION: ${{ env.NAUTOBOT_VERSION }}
+        run: |
+          docker build -t networktocode/nautobot-lab:${NAUTOBOT_VERSION} .
+          docker build -t networktocode/nautobot-lab:latest .
+          echo $DOCKERHUB_TOKEN \
+            | docker login \
+              --username $DOCKERHUB_USERNAME \
+              --password-stdin
+          docker push networktocode/nautobot-lab:${NAUTOBOT_VERSION}
+          docker push networktocode/nautobot-lab:latest
