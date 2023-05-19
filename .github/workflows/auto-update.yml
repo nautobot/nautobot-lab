@@ -67,7 +67,7 @@ jobs:
           nautobot_lab_tag="${{ steps.check_nautobot_lab_tags.outputs.tag }}"
 
           if [[ "$nautobot_version" == "$nautobot_lab_tag" ]]; then
-            echo "Nautobot and Nautobot Lab versions match. Exiting gracefully."
+            echo "Nautobot and Nautobot Lab versions match."
             exit 0
           else
             echo "::set-env name=NAUTOBOT_VERSION::$nautobot_version"
@@ -77,11 +77,16 @@ jobs:
         env:
           NAUTOBOT_VERSION: ${{ env.NAUTOBOT_VERSION }}
         run: |
-          docker build -t networktocode/nautobot-lab:${NAUTOBOT_VERSION} .
-          docker build -t networktocode/nautobot-lab:latest .
-          echo $DOCKERHUB_TOKEN \
-            | docker login \
-              --username $DOCKERHUB_USERNAME \
-              --password-stdin
-          docker push networktocode/nautobot-lab:${NAUTOBOT_VERSION}
-          docker push networktocode/nautobot-lab:latest
+          if [[ -z "${NAUTOBOT_VERSION}" ]]; then
+            echo "Nautobot Lab is up to date."
+            exit 0
+          else
+            docker build -t networktocode/nautobot-lab:${NAUTOBOT_VERSION} .
+            docker build -t networktocode/nautobot-lab:latest .
+            echo $DOCKERHUB_TOKEN \
+              | docker login \
+                --username $DOCKERHUB_USERNAME \
+                --password-stdin
+            docker push networktocode/nautobot-lab:${NAUTOBOT_VERSION}
+            docker push networktocode/nautobot-lab:latest
+          fi
