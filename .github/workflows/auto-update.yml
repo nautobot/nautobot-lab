@@ -9,6 +9,9 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   HUB_URL: "https://hub.docker.com/v2/repositories/networktocode/nautobot-lab"
+  # ACTIONS_ALLOW_UNSECURE_COMMANDS is required to set the NAUTOBOT_VERSION
+  # environment variable
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
   build:
@@ -26,45 +29,29 @@ jobs:
             | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           echo "::set-output name=version::$latest_release"
 
-      - name: Get Nautobot Lab tags
-        id: get_nautobot_lab_tags
+      - name: Get Nautobot Lab image tag
+        id: get_nautobot_lab_tag
         run: |
-          page=1
-          while true; do
-            tags=$(curl -s "$HUB_URL/tags/?page=$page" \
-              | jq -r '.results[].name')
-            if [[ $tags =~ "latest" ]]; then
-              page=$((page + 1))
-            else
-              echo "::set-output name=tags::$tags"
-              break
-            fi
-          done
+          tags=$(curl -s "$HUB_URL/tags/")
+          latest_digest=$(curl -s "$HUB_URL/tags/" | \
+            jq -r '.results[] | select(.name == "latest") | .images[0].digest')
 
-      - name: Check Nautobot Lab tags
-        id: check_nautobot_lab_tags
-        run: |
-          nautobot_lab_tags="${{ steps.get_nautobot_lab_tags.outputs.tags }}"
-          non_latest_tag=""
-          for tag in $nautobot_lab_tags; do
-            if [[ "$tag" != "latest" ]]; then
-              non_latest_tag="$tag"
-              break
-            fi
-          done
+          for row in $(echo $tags | jq -r '.results[] | @base64); do
+            tag=$(echo $row | base64 --decode | jq -r '.name')
+            digest=$(echo $row | base64 --decode | jq -r '.digest')
 
-          if [[ -z "$non_latest_tag" ]]; then
-            echo "No non-latest tag found for Nautobot Lab. Exiting gracefully."
-            exit 0
-          else
-            echo "::set-output name=tag::$non_latest_tag"
-          fi
+            if [ "$tag" == "latest" ]; then
+              continue
+            elif [ "$digest" == "$latest_digest" ]; then
+              echo "::set-output name=tag::$tag"
+              break
+          done
 
       - name: Compare versions and set environment variable
         id: compare_versions
         run: |
           nautobot_version="${{ steps.get_nautobot_release.outputs.version }}"
-          nautobot_lab_tag="${{ steps.check_nautobot_lab_tags.outputs.tag }}"
+          nautobot_lab_tag="${{ steps.check_nautobot_lab_tag.outputs.tag }}"
 
           if [[ "$nautobot_version" == "$nautobot_lab_tag" ]]; then
             echo "Nautobot and Nautobot Lab versions match."
