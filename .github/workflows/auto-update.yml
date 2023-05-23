@@ -3,7 +3,7 @@ name: Update and Build Nautobot Lab Container
 
 on:  # yamllint disable-line rule:truthy
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 2 * * *"
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -30,10 +30,10 @@ jobs:
         id: get_nautobot_lab_tag
         run: |
           tags=$(curl -s "$HUB_URL/tags/")
-          latest_digest=$(curl -s "$HUB_URL/tags/" | \
-            jq -r '.results[] | select(.name == "latest") | .images[0].digest')
+          latest_digest=$(curl -s "$HUB_URL/tags/" \
+            | jq -r '.results[] | select(.name == "latest") | .images[0].digest')
 
-          for row in $(echo $tags | jq -r '.results[] | @base64); do
+          for row in $(echo $tags | jq -r '.results[] | @base64'); do
             tag=$(echo $row | base64 --decode | jq -r '.name')
             digest=$(echo $row | base64 --decode | jq -r '.digest')
 
@@ -42,6 +42,7 @@ jobs:
             elif [ "$digest" == "$latest_digest" ]; then
               echo "::set-output name=tag::$tag"
               break
+            fi
           done
 
       - name: Compare versions and set environment variable
