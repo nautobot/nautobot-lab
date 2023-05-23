@@ -31,7 +31,7 @@ jobs:
         run: |
           tags=$(curl -s "$HUB_URL/tags/")
           latest_digest=$(curl -s "$HUB_URL/tags/" \
-            | jq -r '.results[] | select(.name == "latest") | .images[0].digest')
+           | jq -r '.results[] | select(.name == "latest") | .images[0].digest')
 
           for row in $(echo $tags | jq -r '.results[] | @base64'); do
             tag=$(echo $row | base64 --decode | jq -r '.name')
