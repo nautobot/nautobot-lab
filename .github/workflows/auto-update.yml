@@ -3,7 +3,7 @@ name: Update and Build Nautobot Lab Container
 
 on:  # yamllint disable-line rule:truthy
   schedule:
-    - cron: "0 2 * * *"
+    - cron: "0 0 * * *"
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
