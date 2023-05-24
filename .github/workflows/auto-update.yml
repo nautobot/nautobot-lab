@@ -2,6 +2,7 @@
 name: Update and Build Nautobot Lab Container
 
 on:  # yamllint disable-line rule:truthy
+  workflow_dispatch:  # yamllint disable-line rule:truthy
   schedule:
     - cron: "0 0 * * *"
 
