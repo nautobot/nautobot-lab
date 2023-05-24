@@ -2,8 +2,9 @@
 name: Update and Build Nautobot Lab Container
 
 on:  # yamllint disable-line rule:truthy
+  workflow_dispatch:  # yamllint disable-line rule:truthy
   schedule:
-    - cron: "0 2 * * *"
+    - cron: "0 0 * * *"
 
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -24,7 +25,7 @@ jobs:
           latest_release=$(curl -s \
             https://api.github.com/repos/nautobot/nautobot/releases/latest \
             | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-          echo "::set-output name=version::$latest_release"
+          echo "nautobot_release=$latest_release" >> "$GITHUB_ENV"
 
       - name: Get Nautobot Lab image tag
         id: get_nautobot_lab_tag
@@ -40,7 +41,7 @@ jobs:
             if [ "$tag" == "latest" ]; then
               continue
             elif [ "$digest" == "$latest_digest" ]; then
-              echo "::set-output name=tag::$tag"
+              echo "nautobot_lab_tag=$tag" >> "$GITHUB_ENV"
               break
             fi
           done
@@ -48,10 +49,10 @@ jobs:
       - name: Compare versions and set environment variable
         id: compare_versions
         run: |
-          nautobot_version="${{ steps.get_nautobot_release.outputs.version }}"
-          nautobot_lab_tag="${{ steps.check_nautobot_lab_tag.outputs.tag }}"
+          nautobot_release="${{ env.nautobot_release }}"
+          nautobot_lab_tag="${{ env.nautobot_lab_tag }}"
 
-          if [[ "$nautobot_version" == "$nautobot_lab_tag" ]]; then
+          if [[ "$nautobot_release" == "$nautobot_lab_tag" ]]; then
             echo "Nautobot and Nautobot Lab versions match."
             exit 0
           else
