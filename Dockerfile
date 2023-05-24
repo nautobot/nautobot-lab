@@ -1,4 +1,4 @@
-FROM public.ecr.aws/ubuntu/ubuntu:20.04_stable 
+FROM public.ecr.aws/ubuntu/ubuntu:22.04_stable
 
 ENV NAUTOBOT_VERSION="1.5.19"
 
@@ -36,7 +36,7 @@ RUN apt-get update -y && \
     ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata && \
     apt-get install -y python3 python3-psycopg2 python3-pip \
-      python3-venv python3-dev python3-apt postgresql-12 \
+      python3-venv python3-dev python3-apt postgresql-14 \
       libpq-dev redis-server systemctl git --no-install-recommends && \
     pip3 install --no-cache-dir pip setuptools wheel --upgrade && \
     pip3 install --no-cache-dir --requirement ./templates/requirements.txt && \
