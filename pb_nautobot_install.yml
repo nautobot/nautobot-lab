@@ -115,6 +115,10 @@
       # yamllint disable-line rule:line-length
       ansible.builtin.command: "{{ nautobot_root }}/bin/nautobot-server post_upgrade"
 
+    - name: "SETUP NAUTOBOT DEFAULT ACCOUNT"
+      ansible.builtin.command:
+        cmd: "{{ nautobot_root }}/bin/python3 ./templates/default_user.py"
+
     - name: "SET NAUTOBOT DIRECTORY PERMISSIONS"
       ansible.builtin.file:
         path: "{{ nautobot_root }}"
