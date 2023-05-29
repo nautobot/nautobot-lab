@@ -229,7 +229,8 @@ PLUGINS = [
     "nautobot_data_validation_engine",
     "nautobot_capacity_metrics",
     "nautobot_golden_config",
-    "nautobot_plugin_nornir"
+    "nautobot_plugin_nornir",
+    "nautobot_ssot"
 ]
 
 # Plugins configuration settings. These settings are used by various plugins that the user may have installed.
@@ -241,6 +242,7 @@ PLUGINS = [
 #     }
 # }
 PLUGINS_CONFIG = {
+    "nautobot_ssot": {},
     "nautobot_device_onboarding": {},
     "nautobot_circuit_maintenance": {
         "raw_notification_initial_days_since": 100,

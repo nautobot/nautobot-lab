@@ -14,7 +14,7 @@ from nautobot.users.models import Token
 print("Create User() model instance.")
 User = get_user_model()
 
-print(f"Create {os.getenv("NAUTOBOT_USERNAME")} account.")
+print(f"Create {os.getenv('NAUTOBOT_USERNAME')} account.")
 account = User(
     username=os.getenv("NAUTOBOT_USERNAME"),
     email=os.getenv("NAUTOBOT_EMAIL"),
@@ -26,7 +26,7 @@ account.set_password(
 )
 account.save()
 
-print(f"Create {os.getenv("NAUTOBOT_USERNAME")} API token.")
+print(f"Create {os.getenv('NAUTOBOT_USERNAME')} API token.")
 token = Token(
     key=os.getenv("NAUTOBOT_TOKEN"),
     write_enabled=True,
