@@ -1,6 +1,6 @@
 FROM public.ecr.aws/ubuntu/ubuntu:22.04_stable
 
-ENV NAUTOBOT_VERSION="1.5.19"
+ENV NAUTOBOT_VERSION="1.5.20"
 
 ENV NAUTOBOT_ROOT="/opt/nautobot"
 

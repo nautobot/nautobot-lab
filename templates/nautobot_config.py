@@ -230,7 +230,11 @@ PLUGINS = [
     "nautobot_capacity_metrics",
     "nautobot_golden_config",
     "nautobot_plugin_nornir",
-    "nautobot_ssot"
+    "nautobot_ssot",
+    "nautobot_device_lifecycle_mgmt",
+    "nautobot_firewall_models",
+    "nautobot_bgp_models",
+    "welcome_wizard",
 ]
 
 # Plugins configuration settings. These settings are used by various plugins that the user may have installed.
@@ -242,6 +246,17 @@ PLUGINS = [
 #     }
 # }
 PLUGINS_CONFIG = {
+    "nautobot_bgp_models": {},
+    "welcome_wizard": {
+        "enable_devicetype-library": True,
+        "enable_welcome_banner": True,
+    },
+    "nautobot_device_lifecycle_mgmt": {
+        "barchart_bar_width": float(os.environ.get("BARCHART_BAR_WIDTH", 0.1)),
+        "barchart_width": int(os.environ.get("BARCHART_WIDTH", 12)),
+        "barchart_height": int(os.environ.get("BARCHART_HEIGHT", 5)),
+    },
+    "nautobot_firewall_models": {},
     "nautobot_ssot": {},
     "nautobot_device_onboarding": {},
     "nautobot_circuit_maintenance": {

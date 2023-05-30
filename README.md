@@ -89,6 +89,10 @@ The Nautobot Lab container comes with the following applications pre-installed:
 * [Golden Config](https://docs.nautobot.com/projects/golden-config/en/latest/user/app_overview/)
 * [Nornir](https://docs.nautobot.com/projects/plugin-nornir/en/latest/user/app_overview/)
 * [Nautobot SSoT](https://docs.nautobot.com/projects/ssot/en/latest/user/app_overview/)
+* [Device Cycle Lifecycle Management](https://docs.nautobot.com/projects/device-lifecycle/en/latest/user/app_overview/)
+* [Firewall Models](https://docs.nautobot.com/projects/firewall-models/en/latest/user/app_overview/)
+* [BGP Models](https://docs.nautobot.com/projects/bgp-models/en/latest/user/app_overview/)
+* [Welcome Wizard](https://docs.nautobot.com/projects/welcome-wizard/en/latest/user/app_overview/)
 
 These applications can give you a sense of what is possible with Nautobot as a network automation platform and can assist you with populating the lab environment with data that is unique to you. For the applications that require access to network devices, you can set the `NAPALM_USERNAME` AND `NAPALM_PASSWORD` environment variables when starting the container.
 
