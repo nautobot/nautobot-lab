@@ -20,6 +20,14 @@ ENV NAPALM_USERNAME=""
 
 ENV NAPALM_PASSWORD=""
 
+ENV NAUTOBOT_USERNAME="demo"
+
+ENV NAUTOBOT_EMAIL="opensource@networktocode.com"
+
+ENV NAUTOBOT_PASSWORD="nautobot"
+
+ENV NAUTOBOT_TOKEN="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 ENV DEBCONF_NONINTERACTIVE_SEEN=true

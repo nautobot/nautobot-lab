@@ -3,3 +3,7 @@
 README.md
 nautobot.png
 .gitignore
+.github/
+.vscode/
+pyproject.toml
+poetry.lock

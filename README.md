@@ -57,9 +57,18 @@ The container can be built locally, if preferred.
 docker run -itd --name nautobot -p 8000:8000 nautobot-lab
 ```
 
+## The Default Account
+
+The nautobot-lab container comes with a user pre-defined. The username is `demo` and its corresponding password is `nautobot`. If you choose to build your own container, you can define your own attributes for the default account by setting the following environment variables before executing the  `docker build` command.
+
+* NAUTOBOT_USERNAME
+* NAUTOBOT_EMAIL
+* NAUTOBOT_PASSWORD
+* NAUTOBOT_TOKEN
+
 ## Creating a Super User
 
-Once the container has started and all the services have stabilized, you will need to create a Super User account to start exploring Nautobot. The `nautobot-server createsuperuser` command will prompt you for a username, email address, and password. The email address is unused in this particular workflow and can be left blank.
+Once the container has started and all the services have stabilized, you can create a Super User account to start exploring Nautobot. The `nautobot-server createsuperuser` command will prompt you for a username, email address, and password. The email address is unused in this particular workflow and can be left blank.
 
 ```shell
 % docker exec -it nautobot nautobot-server createsuperuser
@@ -79,6 +88,7 @@ The Nautobot Lab container comes with the following applications pre-installed:
 * [Capacity Metrics](https://github.com/nautobot/nautobot-plugin-capacity-metrics)
 * [Golden Config](https://docs.nautobot.com/projects/golden-config/en/latest/user/app_overview/)
 * [Nornir](https://docs.nautobot.com/projects/plugin-nornir/en/latest/user/app_overview/)
+* [Nautobot SSoT](https://docs.nautobot.com/projects/ssot/en/latest/user/app_overview/)
 
 These applications can give you a sense of what is possible with Nautobot as a network automation platform and can assist you with populating the lab environment with data that is unique to you. For the applications that require access to network devices, you can set the `NAPALM_USERNAME` AND `NAPALM_PASSWORD` environment variables when starting the container.
 
