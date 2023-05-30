@@ -93,6 +93,7 @@
         - "nautobot-golden-config"
         - "nautobot-plugin-nornir"
         - "nautobot-ssot"
+        - "nautobot-device-lifecycle-mgmt"
         - "supervisor"
       loop_control:
         loop_var: "nautobot_item"
