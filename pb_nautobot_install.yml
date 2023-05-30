@@ -94,6 +94,7 @@
         - "nautobot-plugin-nornir"
         - "nautobot-ssot"
         - "nautobot-device-lifecycle-mgmt"
+        - "nautobot-firewall-models"
         - "supervisor"
       loop_control:
         loop_var: "nautobot_item"

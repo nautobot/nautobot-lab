@@ -232,6 +232,7 @@ PLUGINS = [
     "nautobot_plugin_nornir",
     "nautobot_ssot",
     "nautobot_device_lifecycle_mgmt",
+    "nautobot_firewall_models",
 ]
 
 # Plugins configuration settings. These settings are used by various plugins that the user may have installed.
@@ -248,6 +249,7 @@ PLUGINS_CONFIG = {
         "barchart_width": int(os.environ.get("BARCHART_WIDTH", 12)),
         "barchart_height": int(os.environ.get("BARCHART_HEIGHT", 5)),
     },
+    "nautobot_firewall_models": {},
     "nautobot_ssot": {},
     "nautobot_device_onboarding": {},
     "nautobot_circuit_maintenance": {
