@@ -24,27 +24,30 @@ jobs:
         run: |
           latest_release=$(curl -s \
             https://api.github.com/repos/nautobot/nautobot/releases/latest \
-            | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+            | jq -r '.tag_name' | cut -c 2-)
+          echo "Latest Nautobot Release: $latest_release"
           echo "nautobot_release=$latest_release" >> "$GITHUB_ENV"
 
       - name: Get Nautobot Lab image tag
         id: get_nautobot_lab_tag
         run: |
-          tags=$(curl -s "$HUB_URL/tags/")
+          release="${{ env.nautobot_release }}"
+
           latest_digest=$(curl -s "$HUB_URL/tags/" \
            | jq -r '.results[] | select(.name == "latest") | .images[0].digest')
 
-          for row in $(echo $tags | jq -r '.results[] | @base64'); do
-            tag=$(echo $row | base64 --decode | jq -r '.name')
-            digest=$(echo $row | base64 --decode | jq -r '.digest')
+          tag_digest=$(curl -s "$HUB_URL/tags/" \
+           | jq -r --arg var "$release" \
+           '.results[] | select(.name == $var) | .images[0].digest')
 
-            if [ "$tag" == "latest" ]; then
-              continue
-            elif [ "$digest" == "$latest_digest" ]; then
-              echo "nautobot_lab_tag=$tag" >> "$GITHUB_ENV"
+          if [ "$tag_digest" == "$latest_digest" ]; then
+              echo "Setting nautobot_lab_tag to $release"
+              echo "nautobot_lab_tag=$release" >> "$GITHUB_ENV"
               break
-            fi
-          done
+          else
+              echo "A container with $relase does not exist."
+              exit 0
+          fi
 
       - name: Compare versions and set environment variable
         id: compare_versions
@@ -56,7 +59,8 @@ jobs:
             echo "Nautobot and Nautobot Lab versions match."
             exit 0
           else
-            echo "NAUTOBOT_VERSION=$nautobot_version" >> "$GITHUB_ENV"
+            echo "Setting NAUTOBOT_VERSION to $nautobot_release"
+            echo "NAUTOBOT_VERSION=$nautobot_release" >> "$GITHUB_ENV"
           fi
 
       - name: Build and push Nautobot Lab images
@@ -67,12 +71,17 @@ jobs:
             echo "Nautobot Lab is up to date."
             exit 0
           else
+            echo "Building nautobot-lab:$NAUTOBOT_VERSION"
             docker build -t networktocode/nautobot-lab:${NAUTOBOT_VERSION} .
+            echo "Building nautobot-lab:latest with $NAUTOBOT_VERSION"
             docker build -t networktocode/nautobot-lab:latest .
+            echo "Logging into Docker Hub"
             echo $DOCKERHUB_TOKEN \
               | docker login \
                 --username $DOCKERHUB_USERNAME \
                 --password-stdin
+            echo "Pushing nautobot-lab:${NAUTOBOT_VERSION} to Docker Hub"
             docker push networktocode/nautobot-lab:${NAUTOBOT_VERSION}
+            echo "Pushing nautobot-lab:latest to Docker Hub"
             docker push networktocode/nautobot-lab:latest
           fi
