@@ -12,7 +12,7 @@ from nautobot.core.settings import *  # noqa F401,F403
 # access to the server via any other hostnames. The first FQDN in the list will be treated as the preferred name.
 #
 # Example: ALLOWED_HOSTS = ['nautobot.example.com', 'nautobot.internal.local']
-ALLOWED_HOSTS = {{ allowed_hosts }} 
+ALLOWED_HOSTS = {{ allowed_hosts }}
 
 # PostgreSQL database configuration. See the Django documentation for a complete list of available parameters:
 #   https://docs.djangoproject.com/en/stable/ref/settings/#databases
@@ -225,15 +225,15 @@ PAGINATE_COUNT = 50
 # Enable installed plugins. Add the name of each plugin to the list.
 PLUGINS = [
     "nautobot_device_onboarding",
-    "nautobot_circuit_maintenance",
-    "nautobot_data_validation_engine",
-    "nautobot_capacity_metrics",
-    "nautobot_golden_config",
-    "nautobot_plugin_nornir",
-    "nautobot_ssot",
-    "nautobot_device_lifecycle_mgmt",
-    "nautobot_firewall_models",
-    "nautobot_bgp_models",
+    # "nautobot_circuit_maintenance",
+    # "nautobot_data_validation_engine",
+    # "nautobot_capacity_metrics",
+    # "nautobot_golden_config",
+    # "nautobot_plugin_nornir",
+    # "nautobot_ssot",
+    # "nautobot_device_lifecycle_mgmt",
+    # "nautobot_firewall_models",
+    # "nautobot_bgp_models",
     "welcome_wizard",
 ]
 
@@ -246,66 +246,66 @@ PLUGINS = [
 #     }
 # }
 PLUGINS_CONFIG = {
-    "nautobot_bgp_models": {},
+    # "nautobot_bgp_models": {},
     "welcome_wizard": {
         "enable_devicetype-library": True,
         "enable_welcome_banner": True,
     },
-    "nautobot_device_lifecycle_mgmt": {
-        "barchart_bar_width": float(os.environ.get("BARCHART_BAR_WIDTH", 0.1)),
-        "barchart_width": int(os.environ.get("BARCHART_WIDTH", 12)),
-        "barchart_height": int(os.environ.get("BARCHART_HEIGHT", 5)),
-    },
-    "nautobot_firewall_models": {},
-    "nautobot_ssot": {},
+    # "nautobot_device_lifecycle_mgmt": {
+    #     "barchart_bar_width": float(os.environ.get("BARCHART_BAR_WIDTH", 0.1)),
+    #     "barchart_width": int(os.environ.get("BARCHART_WIDTH", 12)),
+    #     "barchart_height": int(os.environ.get("BARCHART_HEIGHT", 5)),
+    # },
+    # "nautobot_firewall_models": {},
+    # "nautobot_ssot": {},
     "nautobot_device_onboarding": {},
-    "nautobot_circuit_maintenance": {
-        "raw_notification_initial_days_since": 100,
-        "raw_notification_size": 16384,
-        "dashboard_n_days": 30,
-        "overlap_job_exclude_no_impact": False,
-        "notification_sources": []
-    },
-    "nautobot_data_validation_engine": {},
-    "nautobot_capacity_metrics": {
-        "app_metrics": {
-            "models": {
-                "dcim": {"Site": True, "Rack": True, "Device": True},
-                "ipam": {"IPAddress": True, "Prefix": True},
-             },
-             "jobs": True,
-             "queues": True,
-             "versions": {
-               "basic": True,
-               "plugins": True,
-            }
-        }
-    },
-    "nautobot_golden_config": {
-        "per_feature_bar_width": 0.15,
-        "per_feature_width": 13,
-        "per_feature_height": 4,
-        "enable_backup": True,
-        "enable_compliance": True,
-        "enable_intended": True,
-        "enable_sotagg": True,
-        "sot_agg_transposer": None,
-        "enable_postprocessing": False,
-        "postprocessing_callables": [],
-        "postprocessing_subscribed": [],
-        "platform_slug_map": None,
-    },
-    "nautobot_plugin_nornir": {
-        "nornir_settings": {
-            "credentials": "nautobot_plugin_nornir.plugins.credentials.env_vars.CredentialsEnvVars",
-            "runner": {
-                "plugin": "threaded",
-                "options": {
-                    "num_workers": 20,
-                },
-            },
-        },
-    }
+    # "nautobot_circuit_maintenance": {
+    #     "raw_notification_initial_days_since": 100,
+    #     "raw_notification_size": 16384,
+    #     "dashboard_n_days": 30,
+    #     "overlap_job_exclude_no_impact": False,
+    #     "notification_sources": []
+    # },
+    # "nautobot_data_validation_engine": {},
+    # "nautobot_capacity_metrics": {
+    #     "app_metrics": {
+    #         "models": {
+    #             "dcim": {"Site": True, "Rack": True, "Device": True},
+    #             "ipam": {"IPAddress": True, "Prefix": True},
+    #          },
+    #          "jobs": True,
+    #          "queues": True,
+    #          "versions": {
+    #            "basic": True,
+    #            "plugins": True,
+    #         }
+    #     }
+    # },
+    # "nautobot_golden_config": {
+    #     "per_feature_bar_width": 0.15,
+    #     "per_feature_width": 13,
+    #     "per_feature_height": 4,
+    #     "enable_backup": True,
+    #     "enable_compliance": True,
+    #     "enable_intended": True,
+    #     "enable_sotagg": True,
+    #     "sot_agg_transposer": None,
+    #     "enable_postprocessing": False,
+    #     "postprocessing_callables": [],
+    #     "postprocessing_subscribed": [],
+    #     "platform_slug_map": None,
+    # },
+    # "nautobot_plugin_nornir": {
+    #     "nornir_settings": {
+    #         "credentials": "nautobot_plugin_nornir.plugins.credentials.env_vars.CredentialsEnvVars",
+    #         "runner": {
+    #             "plugin": "threaded",
+    #             "options": {
+    #                 "num_workers": 20,
+    #             },
+    #         },
+    #     },
+    # }
 }
 
 # When determining the primary IP address for a device, IPv6 is preferred over IPv4 by default. Set this to True to
