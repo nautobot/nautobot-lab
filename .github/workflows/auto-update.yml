@@ -72,7 +72,9 @@ jobs:
             exit 0
           else
             echo "Building nautobot-lab:$NAUTOBOT_VERSION"
-            docker build -t networktocode/nautobot-lab:${NAUTOBOT_VERSION} .
+            docker build \
+              --build-arg NAUTOBOT_VERSION=${NAUTOBOT_VERSION} \
+              -t networktocode/nautobot-lab:${NAUTOBOT_VERSION} .
             echo "Building nautobot-lab:latest with $NAUTOBOT_VERSION"
             docker build -t networktocode/nautobot-lab:latest .
             echo "Logging into Docker Hub"
