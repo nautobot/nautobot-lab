@@ -97,6 +97,7 @@
         - "nautobot-firewall-models"
         - "nautobot-bgp-models"
         - "nautobot-welcome-wizard"
+        - "nautobot-floor-plan"
         - "supervisor"
       loop_control:
         loop_var: "nautobot_item"
