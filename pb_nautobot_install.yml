@@ -43,13 +43,10 @@
         group: "nautobot"
         mode: "0640"
 
-    - name: "UPDATE REDIS.CONF"
-      ansible.builtin.template:
-        src: "redis.conf"
-        dest: "/etc/redis/redis.conf"
-        owner: "redis"
-        group: "redis"
-        mode: "0640"
+    - name: "START REDIS"
+      ansible.builtin.service:
+        name: "redis-server"
+        state: "started"
 
     - name: "UPDATE PG_HBA.CONF"
       ansible.builtin.template:
@@ -132,3 +129,11 @@
         group: "nautobot"
         mode: u=rwX,g=rX,o=rX
         recurse: "yes"
+
+    - name: "UPDATE REDIS.CONF"
+      ansible.builtin.template:
+        src: "redis.conf"
+        dest: "/etc/redis/redis.conf"
+        owner: "redis"
+        group: "redis"
+        mode: "0640"

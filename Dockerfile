@@ -1,6 +1,6 @@
 FROM public.ecr.aws/ubuntu/ubuntu:22.04_stable
 
-ARG NAUTOBOT_VERSION="1.5.24"
+ARG NAUTOBOT_VERSION="1.6.0"
 
 ARG DB_NAME="nautobot"
 
