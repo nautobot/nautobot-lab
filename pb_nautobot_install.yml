@@ -130,6 +130,14 @@
         mode: u=rwX,g=rX,o=rX
         recurse: "yes"
 
+    - name: "ADD LOAD MOCK DATA SCRIPT"
+      ansible.builtin.template:
+        src: "loaddata.sh"
+        dest: "/usr/local/bin/load-mock-data"
+        owner: "nautobot"
+        group: "nautobot"
+        mode: "0755"
+
     - name: "UPDATE REDIS.CONF"
       ansible.builtin.template:
         src: "redis.conf"
