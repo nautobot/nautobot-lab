@@ -57,6 +57,20 @@ The container can be built locally, if preferred.
 docker run -itd --name nautobot -p 8000:8000 nautobot-lab
 ```
 
+### Importing the demo dataset
+
+The nautobot-lab container provides demo dataset similar to the Nautobot public sandbox (http://demo.nautobot.com).
+This dataset can be used to quickly populate your Nautobot instance with the real life data! You can use it to view data, experiment or perform experimental or development work.
+
+Use following command to import the data into your lab container:
+```shell
+docker exec -itd nautobot load-mock-data
+```
+
+!!! warning
+    **Importing dataset will erase your existing data**. Issuing the `load-mock-data` will result in destroying your existing dataset and importing new one.
+    **Dataset contains default credentials**. If you decide to import provided dataset, the dataset credentials will be used: username: `admin`, password: `admin`.
+
 ## The Default Account
 
 The nautobot-lab container comes with a user pre-defined. The username is `demo` and its corresponding password is `nautobot`. If you choose to build your own container, you can define your own attributes for the default account by setting the following environment variables before executing the  `docker build` command.
