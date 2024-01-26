@@ -15,4 +15,3 @@ export PGPASSWORD=$DB_PASSWORD
 psql < {{ nautobot_root }}/templates/nautobot_backup.dump
 
 {{ nautobot_root }}/bin/nautobot-server migrate
-{{ nautobot_root }}/bin/nautobot-server invalidate all
