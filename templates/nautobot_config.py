@@ -236,6 +236,7 @@ PLUGINS = [
     "nautobot_bgp_models",
     "welcome_wizard",
     "nautobot_floor_plan",
+    "nautobot_design_builder",
 ]
 
 # Plugins configuration settings. These settings are used by various plugins that the user may have installed.
