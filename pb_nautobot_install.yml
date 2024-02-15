@@ -95,6 +95,7 @@
         - "nautobot-bgp-models"
         - "nautobot-welcome-wizard"
         - "nautobot-floor-plan"
+        - "nautobot-design-builder"
         - "supervisor"
       loop_control:
         loop_var: "nautobot_item"
