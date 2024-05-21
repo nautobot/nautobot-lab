@@ -1,3 +1,4 @@
 ansible==8.5.0
 pynautobot==1.4.0
 pytest==7.3.1
+requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
